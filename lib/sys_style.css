@@ -1,0 +1,29 @@
+/************************
+	INFO_BLOCK
+************************/
+.info-block{
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	position:fixed;
+	top:-80px;
+	left:50%;
+	font:16px Arial;
+	z-index:10;
+}
+.info-success{
+	color: #3c763d;
+	background-color: rgba(223,240,216,1);
+	border-color: #d6e9c6;
+}
+.info-error{
+	color: #a94442;
+	background-color: rgba(242,222,222,1);
+	border-color: #ebccd1;
+}
+.info-info{
+	color: #31708f;
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+}
