@@ -1,5 +1,8 @@
 <?php
+namespace SimpleCMS\Application;
+use SimpleCMS\Application\Controller\IndexController;
 	class App{
+                const ABSOLUTE_NAME = 'SimpleCMS\\Application\\Controller\\';
 		private static $instance;
 		private $controller, $action, $params = array();
 		private function __construct(){
@@ -12,6 +15,7 @@
 			}else{
 				$this->controller = 'IndexController';
 			}
+                        
 			if(!empty($url_arr[1])){
 				$this->action = $url_arr[1].'Action';
 				if(isset($url_arr[2])){
@@ -43,9 +47,10 @@
 			}
 		}
 		public function route(){
+                    
 			if(file_exists('app/controller/'.$this->getController() . '.php')){
-				if(class_exists($this->getController())){
-					$rfc = new ReflectionClass($this->getController());
+				if(class_exists(self::ABSOLUTE_NAME . $this->getController())){
+					$rfc = new \ReflectionClass(self::ABSOLUTE_NAME . $this->getController());
 					if($rfc->hasMethod($this->getAction())){
 						$method = $rfc->getMethod($this->getAction());
 						$controller = $rfc->newInstance();
@@ -83,10 +88,20 @@
 			if(!is_file($path)){
 				include 'atemplate/please_rename_config_file.php';
 				exit;
-			}elseif(isset($_SESSION['first_start']) || isset($_COOKIE['bad_close_session'])){
+                        }else{
+                            //коннект в базу если норм проверяем дальше
+                            try{
+                                new Model\IModel;
+                            }catch(Exception $e){
+                                echo '<h1>Нет подключения к базе данных</h1>';
+                                echo '<p>Проверьте правильность введенных данных в файле <b>setup.ini</b></p>';
+                                exit;
+                            }
+                            if(isset($_SESSION['first_start']) || isset($_COOKIE['bad_close_session'])){
 				include 'atemplate/please_input_data.php';
 				exit;
-			}
+                            }
+                        }
 			$this->sess_destroy();
 		}
 		protected function sess_destroy(){
@@ -101,4 +116,3 @@
 			session_destroy();
 		}
 	}
-?>

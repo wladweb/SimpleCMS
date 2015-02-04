@@ -5,24 +5,26 @@
 	}
 	if($_SERVER['REQUEST_METHOD'] === 'POST'){
 	
-		$blog_name = clear_string($POST['blog_name']);
-		$blog_desc = clear_string($POST['blog_desc']);
-		$author = clear_string($POST['author']);
-		$email = clear_string($POST['email']);
-		$login = clear_string($POST['login']);
-		$pass = clear_string($POST['pass']);
+		$blog_name = clear_string($_POST['blog_name']);
+		$blog_desc = clear_string($_POST['blog_desc']);
+		$author = clear_string($_POST['author']);
+		$email = clear_string($_POST['email']);
+		$login = clear_string($_POST['login']);
+		$pass = clear_string($_POST['pass']);
 		
-		$blog_model = new Bloginfo;
-		$rowcount = $bloginfo->insert_first_data($author, $email, $blog_desc, $blog_name);
-		if($rowcount !== 1) die('Ошибка при добавлении');
+		$blog_model = new BloginfoModel;
+		$rowcount = $blog_model->insert_first_data($author, $email, $blog_desc, $blog_name);
+                if($rowcount !== 1){ 
+                    die('Ошибка при добавлении'); 
+                }
 		
 		$users_model = new UsersModel;
-		$rowcount = $users_model->add_admin($login, $pass, $email);
+		$rowcount = $users_model->add_admin($login, md5(md5($pass)), $email);
 		
 		if($rowcount === 1){
-			setcookie('bad_close_session', '', time()-3600,'/','/');
+			setcookie('bad_close_session', '', time()-3600);
 			$this->sess_destroy();
-			header("Location: /");
+			header("Location: /index");
 		}else{
 			die('Ошибка при добавлении');
 		}

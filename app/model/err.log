@@ -1,3 +1,0 @@
-01-18-2015 14:15:21 - SQLSTATE[HY000]: General error: 1366 Incorrect integer value: '' for column 'category' at row 1
-01-18-2015 23:26:49 - SQLSTATE[HY000] [1049] Unknown database 'bloga'
-01-18-2015 23:27:29 - SQLSTATE[HY000] [1049] Unknown database 'bloga'
