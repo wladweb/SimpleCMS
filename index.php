@@ -3,7 +3,7 @@
 namespace SimpleCMS;
 
 use SimpleCMS\Application\App;
-use PDO;
+
 	header('Content-Type: text/html; charset=utf-8');
 	
 	set_include_path(get_include_path() .

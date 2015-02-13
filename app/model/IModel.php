@@ -36,6 +36,7 @@ class IModel {
             return $stmt;
         } catch (PDOException $e) {
             $this->write_log($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 

@@ -88,8 +88,7 @@ use SimpleCMS\Application\Controller\IndexController;
 			if(!is_file($path)){
 				include 'atemplate/please_rename_config_file.php';
 				exit;
-                        }else{
-                            //коннект в базу если норм проверяем дальше
+                        }elseif(isset($_SESSION['first_start']) || isset($_COOKIE['bad_close_session'])){
                             try{
                                 new Model\IModel;
                             }catch(Exception $e){
@@ -97,11 +96,10 @@ use SimpleCMS\Application\Controller\IndexController;
                                 echo '<p>Проверьте правильность введенных данных в файле <b>setup.ini</b></p>';
                                 exit;
                             }
-                            if(isset($_SESSION['first_start']) || isset($_COOKIE['bad_close_session'])){
-				include 'atemplate/please_input_data.php';
-				exit;
-                            }
+                            include 'atemplate/please_input_data.php';
+                            exit;
                         }
+                        
 			$this->sess_destroy();
 		}
 		protected function sess_destroy(){

@@ -36,9 +36,6 @@ $_SESSION['first_start'] = true;
         <div class="container">
             <h1>Не найден файл конфигурации <b>setup.ini</b></h1>
             <p class="message">
-                Разверните базу данных из файла <b>blog_dump.sql</b>.пше 
-            </p>
-            <p class="message">
                 Для создания файла конфигурации отредактируйте и переименуйте файл <b>setup_example.ini</b> в корневой директории сайта.
             </p>
         </div>
