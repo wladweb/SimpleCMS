@@ -322,7 +322,13 @@ textarea{
 #mainContent p.comment-mark{
 	margin:0;
 }
-
+.pag ul{
+	list-style-type:none;
+}
+.pag li{
+	float:left;
+	padding:0 5px;
+}
 
 
 

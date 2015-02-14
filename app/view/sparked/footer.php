@@ -1,14 +1,14 @@
 <div class="wrapper row5">
   <footer id="footer" class="clear"> 
     <div class="one_third first">
-		<?php $this->get_template('contact_block.php'); ?>
+		<?php $this->show_template('contact_block.php'); ?>
     </div>
     <div class="one_third">
-		<?php $this->get_template('last_comments.php'); ?>
+		<?php $this->show_template('last_comments.php'); ?>
      
     </div>
     <div class="one_third">
-	<?php $this->get_template('popular.php'); ?>
+	<?php $this->show_template('popular.php'); ?>
     </div>
   </footer>
 </div>

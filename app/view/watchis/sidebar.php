@@ -1,5 +1,5 @@
 <div id="right">
-	<?php $this->get_template('popular.php'); ?>
+	<?php $this->show_template('popular.php'); ?>
 	<br>
-	<?php $this->get_template('last_comments.php'); ?>
+	<?php $this->show_template('last_comments.php'); ?>
 </div>

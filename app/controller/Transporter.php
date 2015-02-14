@@ -89,6 +89,8 @@ class Transporter {
     }
 
     public function end_work($c, $n, $m = '') {
+        $arr = explode('\\', $c);
+        $c = end($arr);
         $ref = $this->get_referer();
         $c = array_search($c, $this->controllers);
         $h = "Location: $ref/cn/$c/tm/$n$m";

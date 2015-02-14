@@ -20,12 +20,14 @@ abstract class IController {
     protected $pagination;
     protected $vote;
     protected $model_factory;
-    protected $vote_interval;
+    protected $vote_interval = 7200; //2 часа
     protected $vote_limit = 10;
     protected $preview_character_count = 300;
     protected $admin_template = 'atemplate';
     protected $transporter;
     protected $post;
+    protected $posts_count;
+    protected $post_start = 0;
     protected $scripts = array();
     protected $styles = array();
     protected $sys_scripts = array(
@@ -40,11 +42,10 @@ abstract class IController {
         $this->params = App::getInstance()->getParams();
         $this->transporter = new Transporter;
         $this->model_factory = new ModelFactory;
-        $this->vote_interval = 3600 * 2;
         $this->set_template_name();
         $this->set_pagination();
-        $this->checkUser();
-        $this->chek_message();
+        $this->check_user();
+        $this->check_message();
     }
 
     public function do_true_action($code, $action, $pars = array()) {
@@ -66,11 +67,11 @@ abstract class IController {
                         'get_pagination_value')['pagination'];
     }
 
-    protected function chek_message() {
+    protected function check_message() {
         $this->transporter->get_message();
     }
 
-    protected function checkUser() {
+    protected function check_user() {
         if (!empty($_COOKIE['uid']) and ! empty($_COOKIE['key'])) {
             $user = $this->do_true_action(self::MUsers, 'get_user_as_key',
                     array($_COOKIE['uid'], $_COOKIE['key']));
@@ -136,7 +137,7 @@ abstract class IController {
     }
 
     protected function get_login_form() {
-        $this->get_template('login_form.php');
+        $this->show_template('login_form.php');
     }
 
     protected function get_popular_panel() {
@@ -151,7 +152,7 @@ abstract class IController {
         return $this->template_name;
     }
 
-    public function get_template($tpl) {
+    public function show_template($tpl) {
         include $this->get_template_name() . '/' . $tpl;
     }
 
@@ -167,11 +168,11 @@ abstract class IController {
         }
     }
 
-    protected function get_pagination($cnt) {
+    protected function get_pagination() {
         $arr_links = array();
-        $page_count = $cnt / $this->pagination;
+        $page_count = $this->posts_count / $this->pagination;
         $page_count = floor($page_count);
-        if ($cnt % $this->pagination !== 0) {
+        if ($this->posts_count % $this->pagination !== 0) {
             $page_count++;
         }
         for ($i = 0; $i < $page_count; $i++) {
@@ -220,6 +221,12 @@ abstract class IController {
         } else {
             unset($this->scripts[$name]);
         }
+    }
+    
+    protected function get_post_start_value(){
+        if (!empty($this->params['pst'])) {
+            $this->post_start = $this->params['pst'];
+        } 
     }
 
 }

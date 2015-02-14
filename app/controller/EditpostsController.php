@@ -8,11 +8,7 @@ class EditpostsController extends IController {
 
     public function indexAction() {
         $this->is_admin();
-        if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
         $this->tpl = 'posts';
         $this->count_data = $this->do_true_action(self::MBloginfo,
                 'get_menu_count_data');
@@ -25,7 +21,7 @@ class EditpostsController extends IController {
     }
 
     protected function get_pagination() {
-        $arr_page_links = parent::get_pagination($this->posts_count);
+        $arr_page_links = parent::get_pagination();
         echo '<h3 class="pag-title">Страницы</h3><ul class="pagination">';
         $anchor = 1;
         $page = $this->post_start / $this->pagination;

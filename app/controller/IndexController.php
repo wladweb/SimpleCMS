@@ -8,11 +8,7 @@ class IndexController extends IController {
 
     public function indexAction() {
         $this->get_data();
-        if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
         $this->posts = $this->do_true_action(self::MPosts, 'get_posts',
                 array((int) $this->post_start, (int) $this->pagination));
         $this->posts_count = array_pop($this->posts);
@@ -22,17 +18,17 @@ class IndexController extends IController {
         }
 
         $this->tpl = 'main.php';
-        $this->get_template('index.php');
+        $this->show_template('index.php');
     }
 
     public function badRequest() {
         $this->get_data();
         $this->tpl = 'error.php';
-        $this->get_template('index.php');
+        $this->show_template('index.php');
     }
 
     public function get_pagination() {
-        $arr_page_links = parent::get_pagination($this->posts_count);
+        $arr_page_links = parent::get_pagination();
         if (!empty($arr_page_links)) {
             echo '<h3>Страницы</h3><ul>';
             $anchor = 1;

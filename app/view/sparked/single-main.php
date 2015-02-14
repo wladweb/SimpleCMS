@@ -1,11 +1,11 @@
 <div class="wrapper row4">
   <main id="container" class="clear"> 
     <!-- container body --> 
-	<?php $this->get_template('single-sidebar.php'); ?>
+	<?php $this->show_template('single-sidebar.php'); ?>
     <div id="content" class="three_quarter"> 
       <h1><?=$this->post['title']?></h1>
 	  <h3><?=$this->post['subtitle']?></h3>
-		<?php $this->get_template('popular_panel.php'); ?>
+		<?php $this->show_template('popular_panel.php'); ?>
       <img class="imgr borderedbox pad5" src="/images/<?php echo $this->post['img']?>" alt="">
       <p><?=$this->post['content']?></p>
       <h1>Table(s)</h1>

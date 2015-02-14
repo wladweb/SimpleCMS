@@ -1,7 +1,7 @@
 <div id="left">
 <?php foreach($this->posts as $this->post) : ?>
 <div class="article">
-	<?php $this->get_template('popular_panel.php'); ?>
+	<?php $this->show_template('popular_panel.php'); ?>
 	<h2><a href="/single/index/post/<?=$this->post['id']?>"><?=$this->post['title']?></a></h2>
 	<h3><?=$this->post['subtitle']?></h3>
 	<div class="clearfix">

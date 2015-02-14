@@ -14,7 +14,7 @@ class SingleController extends IController {
                     array($this->params['post']));
         } else {
             $this->tpl = '404.php';
-            $this->get_template('index.php');
+            $this->show_template('index.php');
             exit;
         }
         if ($this->post !== false) {
@@ -22,10 +22,10 @@ class SingleController extends IController {
                     'get_comments', array($this->post['id']));
             $this->post['post_comment_count'] = count($this->comments);
             $this->tpl = 'single-main.php';
-            $this->get_template('single.php');
+            $this->show_template('single.php');
         } else {
             $this->tpl = '404.php';
-            $this->get_template('index.php');
+            $this->show_template('index.php');
             exit;
         }
     }

@@ -24,6 +24,6 @@
       <p>Тестовый блог MVC</p>
     </div>
   </header>
-  <?php $this->get_template('auth_panel.php'); ?>
+  <?php $this->show_template('auth_panel.php'); ?>
 </div>
  

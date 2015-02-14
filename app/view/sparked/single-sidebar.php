@@ -1,7 +1,7 @@
     <div class="sidebar one_quarter first"> 
       <?php
-		$this->get_template('popular.php');
-		$this->get_template('last_comments.php');
+		$this->show_template('popular.php');
+		$this->show_template('last_comments.php');
 	  ?>
       <div class="sdb_holder">
         <h6>Lorem ipsum dolor</h6>

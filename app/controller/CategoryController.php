@@ -8,11 +8,7 @@ class CategoryController extends IController {
 
     public function indexAction() {
         $this->get_data();
-        if (!empty($this->params['cst'])) {
-            $this->post_start = $this->params['cst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
         if (!empty($this->params['cat'])) {
             $this->cat_name_arr = $this->do_true_action(self::MCategory,
                     'get_categories', array($this->params['cat']));
@@ -22,7 +18,7 @@ class CategoryController extends IController {
             $this->posts_count = array_pop($this->cat_arr);
         } else {
             $this->tpl = '404.php';
-            $this->get_template('index.php');
+            $this->show_template('index.php');
             exit;
         }
         if (!empty($this->cat_name_arr)) {
@@ -34,16 +30,16 @@ class CategoryController extends IController {
                                 $this->preview_character_count, 'utf-8') . '...';
             }
             $this->tpl = 'category-main.php';
-            $this->get_template('category.php');
+            $this->show_template('category.php');
         } else {
             $this->tpl = '404.php';
-            $this->get_template('index.php');
+            $this->show_template('index.php');
             exit;
         }
     }
 
     protected function get_pagination() {
-        $arr_page_links = parent::get_pagination($this->posts_count);
+        $arr_page_links = parent::get_pagination();
         if (!empty($arr_page_links)) {
             echo '<h3>Страницы</h3><ul>';
             $anchor = 1;
@@ -52,7 +48,7 @@ class CategoryController extends IController {
                 if ($l == $this->post_start) {
                     $current = 'class="current"';
                 }
-                echo "<li $current><a href='/category/index/cat/{$this->params['cat']}/cst/$l'>$anchor</a></li>";
+                echo "<li $current><a href='/category/index/cat/{$this->params['cat']}/pst/$l'>$anchor</a></li>";
                 $anchor++;
             }
             echo '</ul>';

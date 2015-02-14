@@ -7,7 +7,7 @@
 	  
       <h3><i><?=$this->post['ctime']?></i></h3>
 	  
-      <div class="pop-wrapper"><?php $this->get_template('popular_panel.php'); ?></div>
+      <div class="pop-wrapper"><?php $this->show_template('popular_panel.php'); ?></div>
 	   <img class="post_preview" src="/images/<?php echo $this->post['img']?>">     
       <p><?=$this->post['content']?></p>
     

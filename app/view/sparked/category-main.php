@@ -7,7 +7,7 @@
     <ul class="nospace center clear">
 	<?php foreach($this->cat_arr as $this->post) : ?>
       <li class="one_third first">
-	  <?php $this->get_template('popular_panel.php'); ?>
+	  <?php $this->show_template('popular_panel.php'); ?>
 	  <a href="/single/index/post/<?=$this->post['id']?>"><img class="pad5 borderedbox push30" src="/images/<?=$this->post['img']?>" alt=""></a>
 	  <div class="clearfix post-info">
 		<span class="float-right"><i><?=$this->post['ctime']?></i></span>

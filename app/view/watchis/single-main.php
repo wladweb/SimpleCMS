@@ -1,6 +1,6 @@
 <div id="left">
 <div class="article">
-	<?php $this->get_template('popular_panel.php'); ?>
+	<?php $this->show_template('popular_panel.php'); ?>
 	<h2><?=$this->post['title']?></h2>
 	<h3><?=$this->post['subtitle']?></h3>
 	<img class="post_preview" src="/images/<?php echo $this->post['img']?>">

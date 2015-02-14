@@ -15,7 +15,7 @@
 			<li><a href="/category/index/cat/<?=$category['id']?>"><?=$category['cat_name']?></a></li>
 		<?php endforeach; ?>	
 		</ul>
-		<?php $this->get_template('auth_panel.php'); ?>
+		<?php $this->show_template('auth_panel.php'); ?>
 		<div id="intro">
 			
 			<p><?=$this->blog_info['description']?></p>

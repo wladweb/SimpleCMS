@@ -11,23 +11,19 @@ class ImagesController extends IController {
 
     public function indexAction() {
         $this->is_admin();
-        if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
         $this->count_data = $this->do_true_action(self::MBloginfo,
                 'get_menu_count_data');
         $this->images_data = $this->do_true_action(self::MImages,
                 'get_all_images',
                 array((int) $this->post_start, (int) $this->pagination));
-        $this->count_img = array_pop($this->images_data);
+        $this->posts_count = array_pop($this->images_data);
         $this->tpl = 'images';
         $this->get_atemplate();
     }
 
     protected function get_pagination() {
-        $arr_page_links = parent::get_pagination($this->count_img);
+        $arr_page_links = parent::get_pagination();
         echo '<h3 class="pag-title">Страницы</h3><ul class="pagination">';
         $anchor = 1;
         $page = $this->post_start / $this->pagination;

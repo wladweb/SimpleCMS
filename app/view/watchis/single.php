@@ -1,6 +1,6 @@
 <?php
-	$this->get_template('header.php');
-	$this->get_template($this->tpl);
-	$this->get_template('sidebar.php');
-	$this->get_template('footer.php');
+	$this->show_template('header.php');
+	$this->show_template($this->tpl);
+	$this->show_template('sidebar.php');
+	$this->show_template('footer.php');
 ?>

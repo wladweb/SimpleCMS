@@ -8,22 +8,18 @@ class UsersController extends IController {
 
     public function indexAction() {
         $this->is_admin();
-        if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
         $this->count_data = $this->do_true_action(self::MBloginfo,
                 'get_menu_count_data');
         $this->users_data = $this->do_true_action(self::MUsers, 'get_all_users',
                 array((int) $this->post_start, (int) $this->pagination));
-        $this->users_count = array_pop($this->users_data);
+        $this->posts_count = array_pop($this->users_data);
         $this->tpl = 'users';
         $this->get_atemplate();
     }
 
     protected function get_pagination() {
-        $arr_page_links = parent::get_pagination($this->users_count);
+        $arr_page_links = parent::get_pagination();
         echo '<h3 class="pag-title">Страницы</h3><ul class="pagination">';
         $anchor = 1;
         $page = $this->post_start / $this->pagination;

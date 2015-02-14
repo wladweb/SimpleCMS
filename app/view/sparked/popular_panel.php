@@ -1,3 +1,6 @@
+<?php
+    use SimpleCMS\Application\Controller\SingleController;
+?>
 <span class="pop">
 	<div class="pop-inner">
 		<?=$this->post['popular']?>
