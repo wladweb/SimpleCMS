@@ -1,0 +1,17 @@
+{
+    "name": "SimpleCMS/SimpleCMS",
+    "description": "Simple CMS for blogs",
+    "keywords": ["Blog", "CMS"],
+    "homepage": "https://github.com/wladweb/SimpleCMS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir Petrov",
+            "email": "wladwebwork@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}    
