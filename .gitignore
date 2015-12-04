@@ -1,4 +1,5 @@
 /nbproject/*
 *.log
 setup.ini
-
+*.orig
+vendor/

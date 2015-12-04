@@ -5,17 +5,29 @@ namespace SimpleCMS;
 use SimpleCMS\Application\Model\IModel;
 use SimpleCMS\Application\Model\BloginfoModel;
 use SimpleCMS\Application\Model\UsersModel;
+use RedBeanPHP\R;
 
 class SimpleInstall {
-
+/*
     private $model;
     private $bloginfo_model;
     private $users_model;
+*/   
+    private $db_data;
+    private $post_data;
+    private $date;
+ 
 
     public function __construct() {
+        /*
         $this->model = new IModel;
         $this->bloginfo_model = new BloginfoModel;
         $this->users_model = new UsersModel;
+         * 
+         */
+        R::setup('mysql:dbname=' . $this->db_data['dbname'] . ';host=' . $this->db_data['host'], $db_data['user'], $db_data['pass']);
+        $this->post_data = $this->get_post_data();
+        $this->date = date('d-M-Y H:i:s', time());
     }
     protected function clear_string($str){
         return trim(strip_tags($str));
@@ -32,6 +44,91 @@ class SimpleInstall {
     }
     
     public function create_tables(){
+        //table category
+        $category = R::dispense('category');
+        $category->cat_name = "Без категории";
+        $category->show_it = R::enum('show_it:checked') ;
+        
+        //table users <-admin
+        $auser = R::dispense('users');
+        $auser->uname = $post_data['login'];
+        $auser->avatar = 'site.gif';
+        $auser->role = R::enum('role:admin');
+        $auser->upass = md5(md5($post_data['pass']));
+        $auser->uemail = $post_data['email'];
+        $auser->ukey = null;
+        $auser->lastvote = time();
+        $auser->utime = time();
+        
+        //table users <-user
+        $uuser = R::dispense('users');
+        $uuser->uname = 'user';
+        $uuser->avatar = 'site.gif';
+        $uuser->role = R::enum('role:user');
+        $uuser->upass = md5(md5('user'));
+        $uuser->uemail = 'user@gmail.com';
+        $uuser->ukey = null;
+        $uuser->lastvote = time();
+        $uuser->utime = time();
+        
+        //table posts
+        $post = R::dispense('posts');
+        $post->title = 'Первый пост';
+        $post->content = 'Привет мир!';
+        $post->author = $auser;
+        $post->subtitle = 'Первая запись в блоге';
+        $post->category = $category;
+        $post->ctime = $this->date;
+        $post->popular = 0;
+        $post->img = 'hello_world.jpg';
+        
+        //table comments <-admin comment
+        $acomment = R::dispense('comments');
+        $acomment->cauthor = $auser;
+        $acomment->post = $post;
+        $acomment->cbody = 'Комметарий админа';
+        $acomment->ctime = $this->date;
+        $acomment->anchor = 'comm54bb8a7a39c1b';
+        
+        //table comments <-user comment
+        $ucomment = R::dispense('comments');
+        $ucomment->cauthor = $uuser;
+        $ucomment->post = $post;
+        $ucomment->cbody = 'Первый комметарий пользователя';
+        $ucomment->ctime = $this->date;
+        $ucomment->anchor = 'comm54bb8a7a39c1a';
+        
+        //table images
+        $image = R::dispense('images');
+        $image->name = 'hello_world.jpg';
+        $image->itime = $this->date;
+        
+        //table bloginfo
+        $bloginfo = R::dispense('bloginfo');
+        $bloginfo->author = $post_data['author'];
+        $bloginfo->email = $post_data['email'];
+        $bloginfo->blogname = $post_data['blog_name'];
+        $bloginfo->description = $post_data['blog_desc'];
+        $bloginfo->template = 'watchis';
+        $bloginfo->pagination = 10;
+        
+        //relations
+        $category->ownPostsList[] = $post;
+        $user->ownCommentsList[] = $comment;
+        $user->ownPostsList[] = $post;
+        $post->ownCommentsList[] = $comment;
+        
+        //save
+        R::store($category);
+        R::store($auser);
+        R::store($uuser);
+        R::store($post);
+        R::store($acomment);
+        R::store($image);
+        R::store($bloginfo);
+        
+        
+        /*
         $sql = array(
             "DROP TABLE IF EXISTS `blog_info`",
             
@@ -153,6 +250,17 @@ class SimpleInstall {
             }
         }
         $this->add_demo_data();
+         * 
+         */
+    }
+    
+    protected function get_db_data() {
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
+        if (is_file($path)) {
+            $this->db_data = parse_ini_file($path);
+        } else {
+            throw new Exception('Проверьте наличие файла setup.ini');
+        }
     }
     
     protected function add_demo_data(){

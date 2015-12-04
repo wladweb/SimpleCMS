@@ -2,7 +2,8 @@
 
 namespace SimpleCMS\Application\Model;
 
-use PDO;
+//use PDO;
+use RedBeanPHP\R;
 
 class IModel {
 
@@ -12,17 +13,23 @@ class IModel {
 
     public function __construct() {
         $this->get_db_data();
-        $this->err_log = $_SERVER['DOCUMENT_ROOT'] . '/app/model/err.log';
-        try {
+        $this->err_log = $_SERVER['DOCUMENT_ROOT'] . '/Application/model/err.log';
+       /* try {
+            
             $this->db = new PDO(
                     'mysql:dbname=' . $this->db_data['dbname'] . ';host=' . $this->db_data['host'],
                     $this->db_data['user'], $this->db_data['pass']
             );
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            
+            
         } catch (PDOException $e) {
             $this->write_log($e->getMessage());
             throw new Exception($e->getMessage());
         }
+         */
+        R::setup('mysql:dbname=' . $this->db_data['dbname'] . ';host=' . $this->db_data['host'], $db_data['user'], $db_data['pass']);
     }
 
     public function query($arr, $type = PDO::PARAM_STR) {
