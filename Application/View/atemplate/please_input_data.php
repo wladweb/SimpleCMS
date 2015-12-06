@@ -1,14 +1,20 @@
 <?php
+
 setcookie('bad_close_session', 'true', time() + 3600 * 24 * 7);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
     require_once $_SERVER['DOCUMENT_ROOT'] . '/install.php';
-    $simple_install = new SimpleCMS\SimpleInstall();
+    $path_ini_file = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
+            
+    $simple_install = new SimpleCMS\SimpleInstall($path_ini_file);
     $simple_install->create_tables();
 
     setcookie('bad_close_session', '', time() - 3600);
     $this->sess_destroy();
     header("Location: /index");
 }
+
 ?>
 <!doctype html>
 <html lang="ru">
