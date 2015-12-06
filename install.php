@@ -8,15 +8,26 @@ use RedBeanPHP\R;
 
 class SimpleInstall {
 
-    protected $db_data;
     protected $post_data;
     protected $date;
-
-    public function __construct() {
+    
+    /**
+     * Setup database connection with RedBeanPHP
+     * 
+     * @param string $path Path to setup.ini file
+     * @return void 
+     */
+    public function __construct($path) {
 
         try {
-            $this->get_db_data();
-            R::setup("mysql:dbname=" . $this->db_data['dbname'] . ";host=" . $this->db_data['host'], $this->db_data['user'], $this->db_data['pass']);
+            $db_data = $this->parseIni($path);
+
+            $dsn = "mysql:dbname={$db_data['dbname']};host={$db_data['host']}";
+            $user = $db_data['user'];
+            $password = $db_data['pass'];
+            
+            R::setup($dsn, $user, $password);
+            
         } catch (BlogException $blog_e) {
             echo $blog_e->getMessage();
         } catch (RedException $red_e) {
@@ -24,13 +35,26 @@ class SimpleInstall {
         }
 
         $this->post_data = $this->get_post_data();
-        $this->date = date('d-M-Y H:i:s', time());
+        
+        $dt = new \DateTime;
+        $this->date = $dt->format('Y-m-d H:i:s');
     }
-
+    
+    /**
+     * Clear string, remove tags and spaces
+     * 
+     * @param string $str Input string
+     * @return string Output string
+     */
     protected function clear_string($str) {
         return trim(strip_tags($str));
     }
-
+    
+    /**
+     * Save data from POST
+     * 
+     * @return array
+     */
     protected function get_post_data() {
         $post_data = array();
         $post_data['blog_name'] = $this->clear_string($_POST['blog_name']);
@@ -41,7 +65,12 @@ class SimpleInstall {
         $post_data['pass'] = $this->clear_string($_POST['pass']);
         return $post_data;
     }
-
+    
+    /**
+     * Create tables and start data with RedBeanPHP
+     * 
+     * @return void 
+     */
     public function create_tables() {
 
         //table category
@@ -57,8 +86,8 @@ class SimpleInstall {
         $auser->upass = md5(md5($post_data['pass']));
         $auser->uemail = $this->post_data['email'];
         $auser->ukey = null;
-        $auser->lastvote = time();
-        $auser->utime = time();
+        $auser->lastvote = $this->date;
+        $auser->utime = $this->date;
 
         //table users <-user
         $uuser = R::dispense('users');
@@ -68,13 +97,13 @@ class SimpleInstall {
         $uuser->upass = md5(md5('user'));
         $uuser->uemail = 'user@gmail.com';
         $uuser->ukey = null;
-        $uuser->lastvote = time();
-        $uuser->utime = time();
+        $uuser->lastvote = $this->date;
+        $uuser->utime = $this->date;
 
         //table posts
         $post = R::dispense('posts');
         $post->title = 'Первый пост';
-        $post->content = 'Привет мир!';
+        $post->content = 'Привет мир! Это первый пост в новом блоге!';
         $post->author = $auser;
         $post->subtitle = 'Первая запись в блоге';
         $post->category = $category;
@@ -86,7 +115,7 @@ class SimpleInstall {
         $acomment = R::dispense('comments');
         $acomment->cauthor = $auser;
         $acomment->post = $post;
-        $acomment->cbody = 'Комметарий админа';
+        $acomment->cbody = 'Комментарий админа';
         $acomment->ctime = $this->date;
         $acomment->anchor = 'comm54bb8a7a39c1b';
 
@@ -122,14 +151,25 @@ class SimpleInstall {
         R::store($image);
         R::store($bloginfo);
     }
-
-    protected function get_db_data() {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
+    
+    /**
+     * Parse ini file
+     * 
+     * @param string $path Path to setup.ini file
+     * @return array Data for database connection
+     * @throws BlogException if ini file not found and ini file not valid 
+     */
+    protected function parseIni($path) {
+        
         if (is_file($path)) {
-            $this->db_data = parse_ini_file($path);
+            if (false === $data = parse_ini_file($path)){
+                throw new BlogException('Проверьте валидность ini-файла');
+            }
         } else {
-            throw new BlogException('Проверьте наличие файла setup.ini');
+            throw new BlogException('Проверьте наличие ini-файла');
         }
+        
+        return $data; 
     }
 
 }

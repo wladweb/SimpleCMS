@@ -14,3 +14,5 @@ require 'vendor/autoload.php';
 
 $app = App::getInstance();
 $app->route();
+
+
