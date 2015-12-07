@@ -72,12 +72,36 @@ class SimpleInstall {
      * @return void 
      */
     public function create_tables() {
+        
+        //table comments <-admin comment
+        $acomment = R::dispense('comments');
+        $acomment->cbody = 'Комментарий админа';
+        $acomment->ctime = $this->date;
+        $acomment->anchor = 'comm54bb8a7a39c1b';
 
+        //table comments <-user comment
+        $ucomment = R::dispense('comments');
+        $ucomment->cbody = 'Первый комметарий пользователя';
+        $ucomment->ctime = $this->date;
+        $ucomment->anchor = 'comm54bb8a7a39c1a';
+        
+        //table posts
+        $post = R::dispense('posts');
+        $post->title = 'Первый пост';
+        $post->content = 'Привет мир! Это первый пост в новом блоге!';
+        $post->subtitle = 'Первая запись в блоге';
+        $post->ctime = $this->date;
+        $post->popular = 0;
+        $post->img = 'hello_world.jpg';
+        $post->ownCommentsList[] = $acomment;
+        $post->ownCommentsList[] = $ucomment;
+        
         //table category
         $category = R::dispense('category');
         $category->cat_name = "Без категории";
         $category->show_it = 1;
-
+        $category->ownPostsList[] = $post;
+        
         //table users <-admin
         $auser = R::dispense('users');
         $auser->uname = $this->post_data['login'];
@@ -88,6 +112,8 @@ class SimpleInstall {
         $auser->ukey = null;
         $auser->lastvote = $this->date;
         $auser->utime = $this->date;
+        $auser->ownCommentsList[] = $acomment;
+        $auser->ownPostsList[] = $post;
 
         //table users <-user
         $uuser = R::dispense('users');
@@ -99,34 +125,8 @@ class SimpleInstall {
         $uuser->ukey = null;
         $uuser->lastvote = $this->date;
         $uuser->utime = $this->date;
-
-        //table posts
-        $post = R::dispense('posts');
-        $post->title = 'Первый пост';
-        $post->content = 'Привет мир! Это первый пост в новом блоге!';
-        $post->author = $auser;
-        $post->subtitle = 'Первая запись в блоге';
-        $post->category = $category;
-        $post->ctime = $this->date;
-        $post->popular = 0;
-        $post->img = 'hello_world.jpg';
-
-        //table comments <-admin comment
-        $acomment = R::dispense('comments');
-        $acomment->cauthor = $auser;
-        $acomment->post = $post;
-        $acomment->cbody = 'Комментарий админа';
-        $acomment->ctime = $this->date;
-        $acomment->anchor = 'comm54bb8a7a39c1b';
-
-        //table comments <-user comment
-        $ucomment = R::dispense('comments');
-        $ucomment->cauthor = $uuser;
-        $ucomment->post = $post;
-        $ucomment->cbody = 'Первый комметарий пользователя';
-        $ucomment->ctime = $this->date;
-        $ucomment->anchor = 'comm54bb8a7a39c1a';
-
+        $uuser->ownCommentsList[] = $ucomment;
+        
         //table images
         $image = R::dispense('images');
         $image->name = 'hello_world.jpg';
