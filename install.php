@@ -126,11 +126,6 @@ class SimpleInstall {
         $uuser->lastvote = $this->date;
         $uuser->utime = $this->date;
         $uuser->ownCommentsList[] = $ucomment;
-        
-        //table images
-        $image = R::dispense('images');
-        $image->name = 'hello_world.jpg';
-        $image->itime = $this->date;
 
         //table bloginfo
         $bloginfo = R::dispense('bloginfo');
@@ -148,7 +143,6 @@ class SimpleInstall {
         R::store($post);
         R::store($acomment);
         R::store($ucomment);
-        R::store($image);
         R::store($bloginfo);
     }
     
