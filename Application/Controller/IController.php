@@ -3,7 +3,7 @@
 namespace SimpleCMS\Application\Controller;
 
 use SimpleCMS\Application\App;
-use SimpleCMS\Application\Model\ModelFactory;
+use SimpleCMS\Application\Model\BlogModel;
 
 abstract class IController {
 
@@ -14,7 +14,10 @@ abstract class IController {
     const MUsers = 4;
     const MImages = 5;
 
+    protected $model;
     protected $params;
+    protected $ini_file = 'setup.ini';
+    
     protected $template_name;
     protected $user;
     protected $pagination;
@@ -30,6 +33,7 @@ abstract class IController {
     protected $post_start = 0;
     protected $scripts = array();
     protected $styles = array();
+    
     protected $sys_scripts = array(
         'jquery' => 'jquery.js',
         'sys_script' => 'sys_script.js'
@@ -39,6 +43,10 @@ abstract class IController {
     );
 
     public function __construct() {
+        $this->model = new BlogModel($this->ini_file);
+    }
+    
+    public function _construct() {
         $this->params = App::getInstance()->getParams();
         $this->transporter = new Transporter;
         $this->model_factory = new ModelFactory;

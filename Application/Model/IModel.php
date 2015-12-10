@@ -61,13 +61,6 @@ class IModel {
                 FILE_APPEND);
     }
 
-    protected function get_db_data() {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
-        if (is_file($path)) {
-            $this->db_data = parse_ini_file($path);
-        } else {
-            throw new Exception('Проверьте наличие файла setup.ini');
-        }
-    }
+    
 
 }

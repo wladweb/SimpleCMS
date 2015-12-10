@@ -2,6 +2,7 @@
 
 namespace SimpleCMS;
 
+use SimpleCMS\Application\Model\BlogModel;
 use SimpleCMS\Application\BlogException;
 use RedBeanPHP\RedException;
 use RedBeanPHP\R;
@@ -20,14 +21,7 @@ class SimpleInstall {
     public function __construct($path) {
 
         try {
-            $db_data = $this->parseIni($path);
-
-            $dsn = "mysql:dbname={$db_data['dbname']};host={$db_data['host']}";
-            $user = $db_data['user'];
-            $password = $db_data['pass'];
-            
-            R::setup($dsn, $user, $password);
-            
+            new BlogModel($path);
         } catch (BlogException $blog_e) {
             echo $blog_e->getMessage();
         } catch (RedException $red_e) {
@@ -145,25 +139,4 @@ class SimpleInstall {
         R::store($ucomment);
         R::store($bloginfo);
     }
-    
-    /**
-     * Parse ini file
-     * 
-     * @param string $path Path to setup.ini file
-     * @return array Data for database connection
-     * @throws BlogException if ini file not found and ini file not valid 
-     */
-    protected function parseIni($path) {
-        
-        if (is_file($path)) {
-            if (false === $data = parse_ini_file($path)){
-                throw new BlogException('Проверьте валидность ini-файла');
-            }
-        } else {
-            throw new BlogException('Проверьте наличие ini-файла');
-        }
-        
-        return $data; 
-    }
-
 }

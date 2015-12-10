@@ -7,6 +7,10 @@ class IndexController extends IController {
     protected $tpl;
 
     public function indexAction() {
+        $this->model->test();
+    }
+    
+    public function _indexAction() {
         $this->get_data();
         $this->get_post_start_value();
         $this->posts = $this->do_true_action(self::MPosts, 'get_posts',
