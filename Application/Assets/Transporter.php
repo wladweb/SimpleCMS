@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleCMS\Application\Controller;
+namespace SimpleCMS\Application\Assets;
 
 use SimpleCMS\Application\App;
 

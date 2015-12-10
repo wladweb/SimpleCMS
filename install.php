@@ -107,7 +107,7 @@ class SimpleInstall {
         $auser->uname = $this->post_data['login'];
         $auser->avatar = 'site.gif';
         $auser->role = R::enum('role:admin');
-        $auser->upass = md5(md5($post_data['pass']));
+        $auser->upass = md5(md5($this->post_data['pass']));
         $auser->uemail = $this->post_data['email'];
         $auser->ukey = null;
         $auser->lastvote = $this->date;
