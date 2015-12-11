@@ -3,6 +3,7 @@
 namespace SimpleCMS\Application\Model;
 
 use RedBeanPHP\R;
+use RedBeanPHP\RedException;
 
 class BlogModel{
     
@@ -13,7 +14,13 @@ class BlogModel{
         $user = $db_data['user'];
         $password = $db_data['pass'];
         
-        R::setup($dsn, $user, $password);
+        try{
+            R::setup($dsn, $user, $password);
+        } catch(RedException $e){
+            R::selectDatabase('default');
+        }
+        
+        R::freeze(true);
     }
     
     protected function deleteRow($table, $id){
