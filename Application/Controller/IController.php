@@ -4,6 +4,7 @@ namespace SimpleCMS\Application\Controller;
 
 use SimpleCMS\Application\App;
 use SimpleCMS\Application\Model\BlogModel;
+use SimpleCMS\Application\Model\Data;
 
 abstract class IController {
 
@@ -18,9 +19,9 @@ abstract class IController {
     protected $params;
     protected $ini_file = 'setup.ini';
     
-    protected $template_name;
+    protected $template_name = 'watchis';
     protected $user;
-    protected $pagination;
+    protected $pagination = 10;
     protected $vote;
     protected $model_factory;
     protected $vote_interval = 7200; //2 часа
@@ -43,7 +44,8 @@ abstract class IController {
     );
 
     public function __construct() {
-        $this->model = new BlogModel($this->ini_file);
+        $this->params = App::getInstance()->getParams();
+        $this->data = new Data;
     }
     
     public function _construct() {
@@ -161,11 +163,11 @@ abstract class IController {
     }
 
     public function show_template($tpl) {
-        include $this->get_template_name() . '/' . $tpl;
+        include $this->get_template_path() . $tpl;
     }
 
     public function get_template_path() {
-        return '/app/view/' . $this->get_template_name() . '/';
+        return 'Application/View/' . $this->get_template_name() . '/';
     }
 
     protected function get_atemplate($tpl = false) {
