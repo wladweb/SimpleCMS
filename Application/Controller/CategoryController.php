@@ -5,8 +5,17 @@ namespace SimpleCMS\Application\Controller;
 class CategoryController extends IController {
 
     protected $tpl;
-
+    protected $data;
+    
     public function indexAction() {
+        $this->get_post_start_value();
+        $this->data = $this->data_instance->getData($this->post_start, $this->pagination, $this->params['cat']);
+        echo '<pre>';var_dump($this->data);exit;
+        //$this->tpl = 'category-main.php';
+        //$this->show_template('category.php');
+    }
+    
+    public function _indexAction() {
         $this->get_data();
         $this->get_post_start_value();
         if (!empty($this->params['cat'])) {

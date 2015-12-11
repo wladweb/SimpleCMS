@@ -5,9 +5,14 @@ namespace SimpleCMS\Application\Controller;
 class IndexController extends IController {
 
     protected $tpl;
+    protected $data;
 
     public function indexAction() {
-        $this->model->test();
+        $this->get_post_start_value();
+        $this->data = $this->data_instance->getData($this->post_start, $this->pagination, $id);
+        
+        $this->tpl = 'main.php';
+        $this->show_template('index.php');
     }
     
     public function _indexAction() {
@@ -23,6 +28,14 @@ class IndexController extends IController {
 
         $this->tpl = 'main.php';
         $this->show_template('index.php');
+    }
+    
+    public function addAction(){
+        $this->data->add('Posts');
+    }
+    
+    public function deleteAction(){
+        $this->data->delete('Posts', $this->params['id']);
     }
 
     public function badRequest() {

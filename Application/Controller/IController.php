@@ -45,7 +45,7 @@ abstract class IController {
 
     public function __construct() {
         $this->params = App::getInstance()->getParams();
-        $this->data = new Data;
+        $this->data_instance = new Data;
     }
     
     public function _construct() {
@@ -204,14 +204,17 @@ abstract class IController {
     }
 
     public function footer_data() {
+        
         foreach ($this->sys_scripts as $n => $s) {
             $this->add_script($n, $s);
             $path = '/lib/' . $s;
             echo "<script type='text/javascript' src=$path></script>\n\r";
         }
-        include_once $this->get_template_name() . '/inc.php';
+        
+        include_once $this->get_template_path() . 'inc.php';
+        
         foreach ($this->scripts as $name => $script) {
-            $path = '/app/view/' . $this->get_template_name() . '/js/' . $script;
+            $path = '/Application/View/' . $this->get_template_name() . '/js/' . $script;
             if (is_file($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 echo "<script type='text/javascript' src=$path></script>\n\r";
             }
