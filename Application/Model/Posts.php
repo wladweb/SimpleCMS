@@ -3,17 +3,16 @@
 namespace SimpleCMS\Application\Model;
 
 use RedBeanPHP\R;
+use SimpleCMS\Application\Model\BlogModel;
 
 
-class Posts extends IModel{
+class Posts extends BlogModel{
     
-    public function getPostsList($start){
-        $sql = "ORDER BY ctime DESC LIMIT :start, :size";
-        
-        $posts_collection = R::findCollection('posts', $sql,
-                array(':start' => (int)$start, ':size' => (int)$this->bloginfo->pagination));
-        
-        $posts = array();
+    const TABLE = 'posts';
+    
+    public function getPostsList($start, $size){
+        $sql = 'ORDER BY ctime DESC';
+        $posts_collection = $this->getCollection(self::TABLE, $start, $size, $sql);
         
         while ($post = $posts_collection->next()){
             
@@ -28,18 +27,22 @@ class Posts extends IModel{
         return $posts;
     }
     
+    public function delete($id){
+        $this->deleteRow(self::TABLE, $id);
+    }
     
-    
-    public function testAdd(){
-        $post = R::dispense('posts');
-        $post->title = 'Одинналцатый пост';
-        $post->content = 'Привет мир! Это первый пост в новом блоге!';
-        $post->subtitle = 'Подзаголовок записи в блоге';
-        $post->ctime = date('Y-m-d H:i:s', time());
-        $post->popular = 0;
-        $post->img = 'hello_world.jpg';
-        
-        R::store($post);
+    public function add(){
+        $data = array(
+            'title' => 'Одинадцатый пост',
+            'subtitle' => 'Второй пост',
+            'content' => 'Второй пост',
+            'ctime' => date('Y-m-d H:i:s', time()),
+            'popular' => 0,
+            'img' => 'hello_world.jpg',
+            'category_id' => 1,
+            'users_id' => 1
+        );
+        $this->addRow(self::TABLE, $data);
     }
 }
 
