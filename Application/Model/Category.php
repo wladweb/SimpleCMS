@@ -2,25 +2,43 @@
 
 namespace SimpleCMS\Application\Model;
 
-use RedBeanPHP\R;
-
-class Category extends IModel{
+class Category extends BlogModel{
     
-    public function getCategoryList($all = false){
+    const TABLE = 'category';
+    
+     public function getMenu($start = 0, $size = 10){
+        $sql = 'WHERE show_it=1';
+        $sql = '';
+        $category_collection = $this->getCollection(self::TABLE, $start, $size, $sql);
         
-        $all ? $sql = '' : $sql = "WHERE show_it = 1" ;
-        $category_collection = R::findCollection('category', $sql);
-        
-        $category = array();
-        
+        $menu = array();
         while ($cat = $category_collection->next()){
             
-                $category[] = $cat->export();
+                $bufer = $cat->export();
+
+                $bufer['posts_count'] = count($cat->ownPostsList);
                 
+                $menu[] = $bufer;
         }
        
-        return $category;
+        return $menu;
+    }
+    
+    public function getCategoryPosts($id){
+        $bean = $this->getRow(self::TABLE, $id);
         
+        $result['caregory'] = array('catname' => $bean->cat_name, 'catid' => $bean->id);
+        
+        $posts = array();
+        
+        foreach ($bean->ownPostsList as $post){
+            $bufer = $post->export();
+            $bufer['author'] = $post->users['uname'];
+            $bufer['comment_count'] = count($post->ownCommentsList);
+            $result['posts'][] = $bufer;
+        }
+        
+        return $result;
     }
     
     public function testAdd(){
