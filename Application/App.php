@@ -29,12 +29,12 @@ class App {
      * @return App
      */
     public static function getInstance() {
+        
         if (!(self::$instance instanceof self)) {
             self::$instance = new self;
-            return self::$instance;
-        } else {
-            return self::$instance;
         }
+        
+        return self::$instance;
     }
     
     /**
@@ -153,7 +153,7 @@ class App {
      * 
      * @return string controller class name
      */
-    private function getController() {
+    public function getController() {
         return $this->controller;
     }
     
@@ -162,7 +162,7 @@ class App {
      * 
      * @return string action method name
      */
-    private function getAction() {
+    public function getAction() {
         return $this->action;
     }
     
