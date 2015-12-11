@@ -2,7 +2,6 @@
 
 namespace SimpleCMS\Application\Model;
 
-use RedBeanPHP\R;
 use SimpleCMS\Application\Model\BlogModel;
 
 
@@ -26,6 +25,8 @@ class Posts extends BlogModel{
        
         return $posts;
     }
+    
+   
     
     public function delete($id){
         $this->deleteRow(self::TABLE, $id);
