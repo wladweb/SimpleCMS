@@ -18,10 +18,11 @@ abstract class IController {
     protected $model;
     protected $params;
     protected $ini_file = 'setup.ini';
+    protected $data_instance;
     
     protected $template_name = 'watchis';
     protected $user;
-    protected $pagination = 10;
+    protected $pagination = 3;
     protected $vote;
     protected $model_factory;
     protected $vote_interval = 7200; //2 часа
@@ -57,7 +58,12 @@ abstract class IController {
         $this->check_user();
         $this->check_message();
     }
-
+    
+    public function pagination($ul_class = 'pagination', $li_class = 'pagination-item', $active_class = 'active'){
+        $p = $this->data['pagination'];
+        $p->show($ul_class, $li_class, $active_class);
+    }
+    
     public function do_true_action($code, $action, $pars = array()) {
         $model = $this->model_factory->get_model($code);
         $reflectionModel = new \ReflectionObject($model);
@@ -238,7 +244,7 @@ abstract class IController {
     
     protected function get_post_start_value(){
         if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
+            $this->post_start = (int)$this->params['pst'];
         } 
     }
 

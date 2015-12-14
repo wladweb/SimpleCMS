@@ -8,6 +8,17 @@ class SingleController extends IController {
     protected $tpl;
 
     public function indexAction() {
+        $this->tpl = '404.php';
+        
+        if (!empty($this->params['post'])) {
+            $this->data = $this->data_instance->getPostData($this->params['post']);
+            $this->tpl = 'single-main.php';
+        }
+        
+        $this->show_template('single.php');
+    }
+    
+    public function _indexAction() {
         $this->get_data();
         if (!empty($this->params['post'])) {
             $this->post = $this->do_true_action(self::MPosts, 'get_post',

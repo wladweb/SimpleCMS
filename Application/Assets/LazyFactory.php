@@ -11,7 +11,7 @@ use SimpleCMS\Application\Model\Comments;
 class LazyFactory {
     
     private $posts;
-    private $categoty;
+    private $category;
     private $bloginfo;
     private $users;
     private $comments;

@@ -2,6 +2,8 @@
 
 namespace SimpleCMS\Application\Controller;
 
+use SimpleCMS\Application\Assets\Pagination;
+
 class IndexController extends IController {
 
     protected $tpl;
@@ -9,11 +11,13 @@ class IndexController extends IController {
 
     public function indexAction() {
         $this->get_post_start_value();
-        $this->data = $this->data_instance->getData($this->post_start, $this->pagination, $id);
+        $this->data = $this->data_instance->getIndexData($this->post_start, $this->pagination);
+        $this->data['pagination'] = new Pagination($this->pagination, $this->data['posts_count'], $this->params);
         
         $this->tpl = 'main.php';
         $this->show_template('index.php');
     }
+    
     
     public function _indexAction() {
         $this->get_data();

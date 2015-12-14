@@ -10,13 +10,15 @@ class Pagination{
     private $count;
     private $page_count;
     private $current_page;
+    private $params;
     
     const START_PARAM = 'pst';
     
-    public function __construct($pagination, $count, $current_page) {
+    public function __construct($pagination, $count, $params) {
         $this->pagination = $pagination;
         $this->count = $count;
-        $this->current_page = $current_page/$pagination+1;
+        $this->params = $params;
+        $this->current_page = $this->getCurrentPage();
         
         $this->calculate();
     }
@@ -39,21 +41,21 @@ class Pagination{
         
         for ($i = 0; $i < $this->page_count; $i++) {
             $start_param = $i * $this->pagination;
-            echo $this->buildLi($i, $li_class, $start_param);
+            echo $this->buildLi($i, $li_class, $active_class, $start_param);
         }
         
         echo '</ul>';
     }
     
-    private function buildLi($i, $class, $start_param){
+    private function buildLi($i, $class, $active_class, $start_param){
         ++$i;
         $li_element = '';
         
-        $li_element .= "<li class='$class'>";
-        
         if ($i !== $this->current_page){
+            $li_element .= "<li class='$class'>";
             $li_element .= $this->buildA($i, $start_param);
         }else{
+            $li_element .= "<li class='$class $active_class'>";
             $li_element .= $i;
         }
         
@@ -66,7 +68,16 @@ class Pagination{
         $controller  =  strstr(App::getInstance()->getController(), 'Controller', true);
         $action  =  strstr(App::getInstance()->getAction(), 'Action', true);
         
-        $href = "/$controller/$action/" . self::START_PARAM . "/$param";
+        $param_string = '';
+        
+        $this->params[self::START_PARAM] = $param;
+        
+        foreach ($this->params as $part1 => $part2){
+            $param_string .= $part1 . '/' . $part2 . '/';
+        }
+        
+        
+        $href = "/$controller/$action/" . $param_string;
 
         $a_element = '';
         $a_element .= "<a href='$href'>";
@@ -74,6 +85,21 @@ class Pagination{
         $a_element .= '</a>';
         
         return $a_element;
+    }
+    
+    protected function getCurrentPage(){
+        //
+        isset($this->params[Pagination::START_PARAM])? $current_page = $this->params[Pagination::START_PARAM] : $current_page = 1;
+        
+        $pst = 0;
+        
+        if (isset($this->params[Pagination::START_PARAM])){
+            $pst = $this->params[Pagination::START_PARAM];
+        }
+         
+        $current_page = $pst/$this->pagination+1;
+        
+        return $current_page;
     }
 }
 

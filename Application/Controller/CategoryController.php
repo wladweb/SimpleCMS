@@ -2,6 +2,8 @@
 
 namespace SimpleCMS\Application\Controller;
 
+use SimpleCMS\Application\Assets\Pagination;
+
 class CategoryController extends IController {
 
     protected $tpl;
@@ -9,10 +11,14 @@ class CategoryController extends IController {
     
     public function indexAction() {
         $this->get_post_start_value();
-        $this->data = $this->data_instance->getData($this->post_start, $this->pagination, $this->params['cat']);
-        echo '<pre>';var_dump($this->data);exit;
-        //$this->tpl = 'category-main.php';
-        //$this->show_template('category.php');
+        if (empty($this->params['cat'])) {
+           $this->params['cat'] = 1;
+        }
+        $this->data = $this->data_instance->getCategoryData($this->params['cat'], $this->post_start, $this->pagination);
+        $this->data['pagination'] = new Pagination($this->pagination, $this->data['posts_count'], $this->params);
+        
+        $this->tpl = 'category-main.php';
+        $this->show_template('category.php');
     }
     
     public function _indexAction() {
