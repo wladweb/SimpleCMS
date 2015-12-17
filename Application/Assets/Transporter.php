@@ -48,7 +48,11 @@ class Transporter {
             'u2' => array('Произошла ошибка при обновлении', 'error'),
             'u3' => array('Ничего не изменено', 'info'),
             'd1' => array('Пользователь успешно удален', 'success'),
-            'd2' => array('Произошла ошибка при удалении', 'error')
+            'd2' => array('Произошла ошибка при удалении', 'error'),
+            'l1' => array('Неправильный логин или пароль', 'error'),
+            'l2' => array('Заполните все поля', 'error'),
+            'r1' => array('Успешная регистрация', 'success'),
+            'r2' => array('Не удалось зарегистрироваться', 'error')
         ),
         'AdminController' => array(
             'u1' => array('Информация успешно обновлена', 'success'),
@@ -63,10 +67,7 @@ class Transporter {
             'a2' => array('Произошла ошибка при добавлении поста', 'error')
         ),
         'AuthController' => array(
-            'l1' => array('Неправильный логин или пароль', 'error'),
-            'l2' => array('Заполните все поля', 'error'),
-            'r1' => array('Успешная регистрация', 'success'),
-            'r2' => array('Не удалось зарегистрироваться', 'error')
+            
         ),
         'CategoryController' => array(
             'a1' => array('Категория успешно добавлена', 'success'),
@@ -119,7 +120,7 @@ class Transporter {
                         $this->params)) {
             $t_message = $this->params['tm'];
             $c_name = $this->params['cn'];
-            $m = $this->data[$this->controllers[$c_name]][$t_message];
+            $m = $this->data[$this->controllers[$c_name]][$t_message]; 
             $this->get_info_block($m);
         }
     }
