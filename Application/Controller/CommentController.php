@@ -2,6 +2,8 @@
 
 namespace SimpleCMS\Application\Controller;
 
+use SimpleCMS\Application\Assets\Pagination;
+
 class CommentController extends IController {
 
     protected $tpl;
@@ -13,17 +15,29 @@ class CommentController extends IController {
 
     public function addAction() {
         if (isset($_POST['send-message'])) {
+            
             if (!empty($_POST['message'])) {
-                $rows = $this->do_true_action(self::MComments, 'addComment',
-                        array($_POST['message'], $this->params['postid'], $this->params['uid'],
-                    $this->anchor_gen()));
-                if (!$rows) {
+                
+                //$rows = $this->do_true_action(self::MComments, 'addComment',
+                       // array($_POST['message'], $this->params['postid'], $this->params['uid'],
+                   // $this->anchor_gen()));
+                $data = array();
+                $data['cbody'] = trim(strip_tags($_POST['message']));
+                $data['ctime'] = date('Y-m-d H:i:s', time());
+                $data['anchor'] = $this->anchor_gen();
+                $data['posts_id'] = $this->params['postid'];
+                $data['users_id'] = $this->user->id;
+                
+                $comment_id = $this->data_instance->add('Comments', $data);
+                
+                if (!$comment_id) {
                     $this->transporter->end_work(__CLASS__, 'ac2',
                             '#comment-mark');
                 } else {
                     $this->transporter->end_work(__CLASS__, 'ac1',
                             '#comment-mark');
                 }
+                
             } else {
                 $this->transporter->end_work(__CLASS__, 'ac3', '#comment-mark');
             }
@@ -34,29 +48,38 @@ class CommentController extends IController {
 
     public function indexAction() {
         $this->is_admin();
-        if (!empty($this->params['pst'])) {
-            $this->post_start = $this->params['pst'];
-        } else {
-            $this->post_start = 0;
-        }
+        $this->get_post_start_value();
+        
         $this->tpl = 'edit_comment';
-        $this->count_data = $this->do_true_action(self::MBloginfo,
-                'get_menu_count_data');
-        $this->comments = $this->do_true_action(self::MComments,
-                'get_all_comments',
-                array((int) $this->post_start, (int) $this->coment_pagination));
-        $this->comment_count = array_pop($this->comments);
+        $this->data = $this->data_instance->getComments($this->post_start, $this->pagination);
+        $this->data['count_data'] = $this->data_instance->countData();
+        $this->data['pagination'] = $this->data['pagination'] = new Pagination($this->pagination, $this->data['comment_count'], $this->params);
+        
+       // $this->comments = $this->do_true_action(self::MComments,
+                //'get_all_comments',
+                //array((int) $this->post_start, (int) $this->coment_pagination));
+        
+        //$this->comment_count = array_pop($this->comments);
+        
+        
+        
         $this->get_atemplate();
     }
 
     public function editAction() {
         $this->is_admin();
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST' and isset($_POST['content'])) {
-            $content = trim(strip_tags($_POST['content']));
-            $cid = abs((int) $_POST['cid']);
-            $r = $this->do_true_action(self::MComments, 'edit_comment',
-                    array($content, $cid));
-            if ($r) {
+           
+            $data['cbody'] = trim(strip_tags($_POST['content']));
+            $data['cid'] = abs((int) $_POST['cid']);
+            
+            //$r = $this->do_true_action(self::MComments, 'edit_comment',
+                    //array($content, $cid));
+            
+            $id = $this->data_instance->update('Comments', $data);
+            
+            if ($id) {
                 $this->transporter->end_work(__CLASS__, 'e1');
             } else {
                 $this->transporter->end_work(__CLASS__, 'e2');
@@ -66,15 +89,20 @@ class CommentController extends IController {
 
     public function delAction() {
         $this->is_admin();
+        
         if (!empty($this->params['cid'])) {
+            
             $cid = (int) $this->params['cid'];
-            $r = $this->do_true_action(self::MComments, 'delete_comment',
-                    array($cid));
-            if ($r) {
-                $this->transporter->end_work(__CLASS__, 'd1');
-            } else {
-                $this->transporter->end_work(__CLASS__, 'd2');
-            }
+            
+            //$r = $this->do_true_action(self::MComments, 'delete_comment',
+               //     array($cid));
+           
+            $this->data_instance->delete('Comments', $cid);
+            
+           $this->transporter->end_work(__CLASS__, 'd1');
+           
+        }else{
+            $this->transporter->end_work(__CLASS__, 'd2');
         }
     }
 
