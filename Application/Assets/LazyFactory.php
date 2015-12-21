@@ -4,7 +4,7 @@ namespace SimpleCMS\Application\Assets;
 
 use SimpleCMS\Application\Model\Posts;
 use SimpleCMS\Application\Model\Category;
-use SimpleCMS\Application\Model\BlogInfo;
+use SimpleCMS\Application\Model\Bloginfo;
 use SimpleCMS\Application\Model\Users;
 use SimpleCMS\Application\Model\Comments;
 
@@ -35,7 +35,7 @@ class LazyFactory {
     public function getBloginfo() {
 
         if (!$this->bloginfo) {
-            $this->bloginfo = new BlogInfo;
+            $this->bloginfo = new Bloginfo;
         }
         return $this->bloginfo;
     }

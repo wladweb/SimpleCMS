@@ -53,11 +53,11 @@ class Pagination{
         
         if ($i !== $this->current_page){
             $li_element .= "<li class='$class'>";
-            $li_element .= $this->buildA($i, $start_param);
         }else{
             $li_element .= "<li class='$class $active_class'>";
-            $li_element .= $i;
         }
+        
+        $li_element .= $this->buildA($i, $start_param);
         
         $li_element .= '</li>';
         
@@ -65,7 +65,7 @@ class Pagination{
     }
     
     private function buildA($anchor, $param){
-        $controller  =  strstr(App::getInstance()->getController(), 'Controller', true);
+        $controller  =  lcfirst(strstr(App::getInstance()->getController(), 'Controller', true));
         $action  =  strstr(App::getInstance()->getAction(), 'Action', true);
         
         $param_string = '';

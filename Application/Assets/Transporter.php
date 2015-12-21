@@ -58,7 +58,7 @@ class Transporter {
             'u1' => array('Информация успешно обновлена', 'success'),
             'u2' => array('Произошла ошибка при обновлении', 'error')
         ),
-        'EditpostsController' => array(
+        'IndexController' => array(
             'u1' => array('Пост успешно отредактирован', 'success'),
             'u2' => array('Произошла ошибка при редактировании поста', 'error'),
             'd1' => array('Пост успешно удален', 'success'),
