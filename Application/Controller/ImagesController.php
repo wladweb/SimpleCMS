@@ -5,10 +5,17 @@ namespace SimpleCMS\Application\Controller;
 class ImagesController extends IController {
 
     protected $tpl;
-    private $upload_dir = "E:/www/blog/images/";
-    private $upload_dir_ava = "E:/www/blog/images/avatars/";
+    private $upload_dir;
+    private $upload_dir_ava;
     private $mime_type;
-
+    
+    public function __construct() {
+        parent::__construct();
+        
+        $this->upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/images/";
+        $this->upload_dir_ava = $_SERVER['DOCUMENT_ROOT'] . "/images/avatars/";
+    }
+    
     public function indexAction() {
         $this->is_admin();
         $this->get_post_start_value();
@@ -40,29 +47,28 @@ class ImagesController extends IController {
     }
 
     public function uploadAction() {
-        $this->check_image();
-        if ($this->re_save_img()) {
-            if (move_uploaded_file($_FILES['preview_load']['tmp_name'],
-                            $this->upload_dir . $_FILES['preview_load']['name'])) {
-                $this->do_true_action(self::MImages, 'add_img',
-                        array($_FILES['preview_load']['name']));
-                $this->transporter->end_work(__CLASS__, 'i1');
-            }
-        }
+        $this->saveImg($this->upload_dir);
+        $this->transporter->end_work(__CLASS__, 'i1');
     }
 
     public function avatarAction() {
+        $img = $this->saveImg($this->upload_dir_ava);
+        
+        $this->data_instance->update('Users', array('uid' => $this->user-id, 'avatar' => $img));
+        $this->transporter->end_work(__CLASS__, 'i1');
+    }
+    
+    public function saveImg($path){
         $this->check_image();
         if ($this->re_save_img()) {
             if (move_uploaded_file($_FILES['preview_load']['tmp_name'],
-                            $this->upload_dir_ava . $_FILES['preview_load']['name'])) {
-                $this->do_true_action(self::MImages, 'add_avatar',
-                        array($_FILES['preview_load']['name'], $this->user['uid']));
-                $this->transporter->end_work(__CLASS__, 'i1');
+                            $path . $_FILES['preview_load']['name'])) {
+                return $_FILES['preview_load']['name'];
+                
             }
         }
     }
-
+    
     protected function check_image() {
         if (!isset($_FILES['preview_load'])) {
             $this->transporter->end_work(__CLASS__, 'i2');

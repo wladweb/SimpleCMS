@@ -74,8 +74,6 @@ class IndexController extends IController {
                 $this->transporter->end_work(__CLASS__, 'a2');
             }
         }
-        
-        $this->data->add('Posts');
     }
 
     public function delAction() {
@@ -142,10 +140,11 @@ class IndexController extends IController {
             }
             echo '</ul>';
         }
-    }
+    }   
     
     public function imgAction(){
         $arr = scandir($_SERVER['DOCUMENT_ROOT'] . self::IMG_PATH);
+        
         if (!is_array($arr)) return false;
         $result = array();
         foreach ($arr as $item){

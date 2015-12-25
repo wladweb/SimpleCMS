@@ -14,10 +14,18 @@ class CategoryController extends IController {
         if (empty($this->params['cat'])) {
            $this->params['cat'] = 1;
         }
+        
         $this->data = $this->data_instance->getCategoryData($this->params['cat'], $this->post_start, $this->pagination);
+        
+        if (empty($this->data['posts'])){
+            $this->tpl = '404.php';
+        }else{
+            $this->tpl = 'category-main.php'; 
+        }
+        
         $this->data['pagination'] = new Pagination($this->pagination, $this->data['posts_count'], $this->params);
         
-        $this->tpl = 'category-main.php';
+        
         $this->show_template('category.php');
     }
     
@@ -73,10 +81,18 @@ class CategoryController extends IController {
     public function editcatsAction() {
         $this->is_admin();
         $this->tpl = 'edit_category';
+        
+        $this->data['count_data'] = $this->data_instance->countData();
+        $this->data['categories'] = $this->data_instance->getAllCategory('Category');
+        
+        /*
         $this->count_data = $this->do_true_action(self::MBloginfo,
                 'get_menu_count_data');
         $this->categories = $this->do_true_action(self::MCategory,
                 'get_categories_edit');
+         * 
+         */
+        
         $this->get_atemplate();
     }
 
@@ -101,17 +117,24 @@ class CategoryController extends IController {
 
     public function updateAction() {
         $this->is_admin();
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $category = trim(strip_tags($_POST['category']));
-            $cat_id = abs((int) ($_POST['cat_id']));
+            
+            $data['cat_name'] = trim(strip_tags($_POST['category']));
+            $data['cat_id'] = abs((int) ($_POST['cat_id']));
+            
             if (!empty($_POST['show_it']) and $_POST['show_it'] === 'checked') {
-                $show_it = trim(strip_tags($_POST['show_it']));
-            } else {
-                $show_it = '';
+                $data['show_it'] = 1;
+            }else{
+                $data['show_it'] = 0;
             }
-            $r = $this->do_true_action(self::MCategory, 'update_category',
-                    array($category, $cat_id, $show_it));
-            if ($r) {
+            
+            //$r = $this->do_true_action(self::MCategory, 'update_category',
+               //     array($category, $cat_id, $show_it));
+            
+            $id = $this->data_instance->update('Category', $data);
+            
+            if ($id) {
                 $this->transporter->end_work(__CLASS__, 'u1');
             } else {
                 $this->transporter->end_work(__CLASS__, 'u3');
@@ -124,15 +147,18 @@ class CategoryController extends IController {
     public function delAction() {
         $this->is_admin();
         $pid = $this->params['pid'];
+        
         if (!empty($pid)) {
-            $this->do_true_action(self::MPosts, 'move_posts', array($pid));
-            $r = $this->do_true_action(self::MCategory, 'delete_category',
-                    array($pid));
-            if ($r) {
-                $this->transporter->end_work(__CLASS__, 'd1');
-            } else {
-                $this->transporter->end_work(__CLASS__, 'd2');
-            }
+            
+            //$this->do_true_action(self::MPosts, 'move_posts', array($pid));
+           // $r = $this->do_true_action(self::MCategory, 'delete_category',
+                    //array($pid));
+           
+            $this->data_instance->movePostsToDefault('Category', $pid);
+            $this->data_instance->delete('Category', $pid);
+            
+            $this->transporter->end_work(__CLASS__, 'd1');
+            
         } else {
             $this->transporter->end_work(__CLASS__, 'd2');
         }

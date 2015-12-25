@@ -5,6 +5,7 @@ namespace SimpleCMS\Application\Controller;
 use SimpleCMS\Application\App;
 use SimpleCMS\Application\Model\BlogModel;
 use SimpleCMS\Application\Model\Data;
+use SimpleCMS\Application\Assets\Transporter;
 
 abstract class IController {
 
@@ -47,16 +48,19 @@ abstract class IController {
     public function __construct() {
         $this->params = App::getInstance()->getParams();
         $this->data_instance = new Data;
+        $this->transporter = new Transporter;
+        $this->check_message();
+        $this->check_user();
     }
     
     public function _construct() {
         $this->params = App::getInstance()->getParams();
-        $this->transporter = new Transporter;
+        
         $this->model_factory = new ModelFactory;
         $this->set_template_name();
         $this->set_pagination();
-        $this->check_user();
-        $this->check_message();
+        
+        
     }
     
     public function pagination($ul_class = 'pagination', $li_class = 'pagination-item', $active_class = 'active'){
@@ -89,30 +93,40 @@ abstract class IController {
 
     protected function check_user() {
         if (!empty($_COOKIE['uid']) and ! empty($_COOKIE['key'])) {
-            $user = $this->do_true_action(self::MUsers, 'get_user_as_key',
-                    array($_COOKIE['uid'], $_COOKIE['key']));
+            
+            $user = $this->data_instance->get('Users', array('sql' => 'id = :id AND ukey = :ukey', ':id' => $_COOKIE['uid'], ':ukey' => $_COOKIE['key']));
+            
             if ($user) {
+                $user = array_pop($user);
                 $this->setUser($user);
                 $this->chek_vote();
             } else {
+                
                 $this->setUser(false);
             }
         }
     }
 
     protected function chek_vote() {
+        
         if (isset($_COOKIE['vv'])) {
+            
             if ($_COOKIE['vv'] >= $this->vote_limit) {
+                
                 $this->vote = false;
-                $this->do_true_action(self::MUsers, 'set_last_vote_time',
-                        array($this->user['uid']));
+                
+                $this->data_instance->update('Users', array('id' => $this->user->id, 'lastvote' => date('Y-m-d H:i:s', time())));
+                
                 setcookie('vv', '', time() - 3600, '/');
             } else {
+                
                 $this->vote = true;
             }
         } else {
-            $dt = $this->do_true_action(self::MUsers, 'get_last_vote_time',
-                            array($this->user['uid']))['last_vote'];
+            
+            $date_time = new \DateTime($this->user->lastvote);
+            $dt = $date_time->getTimestamp();
+            
             if ($dt + $this->vote_interval < time()) {
                 $this->vote = true;
             } else {
@@ -125,7 +139,7 @@ abstract class IController {
         if (!$this->user) {
             header('Location:/');
             exit;
-        } elseif ($this->user['role'] !== 'admin') {
+        } elseif ($this->user->role->name !== 'ADMIN') {
             header('Location:/');
             exit;
         }
@@ -175,12 +189,16 @@ abstract class IController {
     public function get_template_path() {
         return 'Application/View/' . $this->get_template_name() . '/';
     }
+    
+    public function get_atemplate_path() {
+        return 'Application/View/' . $this->admin_template . '/';
+    }
 
     protected function get_atemplate($tpl = false) {
         if (!$tpl) {
-            include $this->admin_template . '/index.php';
+            include $this->get_atemplate_path() . '/index.php';
         } else {
-            include $this->admin_template . "/$tpl.php";
+            include $this->get_atemplate_path() . "/$tpl.php";
         }
     }
 
@@ -199,13 +217,17 @@ abstract class IController {
     }
 
     protected function get_atemplate_sidebar() {
+        
         $uri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
+        
         if (empty($uri[1])) $uri[1] = 'index';
+        
         $uri_need = '/' . $uri[0] . '/' . $uri[1];
+        
         if ($uri_need === '/users/edit') {
-            require_once 'atemplate/user_block.php';
+            require_once $this->get_atemplate_path() . 'user_block.php';
         } else {
-            require_once 'atemplate/amenu.php';
+            require_once $this->get_atemplate_path() . 'amenu.php';
         }
     }
 
@@ -247,5 +269,12 @@ abstract class IController {
             $this->post_start = (int)$this->params['pst'];
         } 
     }
-
+    
+    protected function cutText($text) {
+        return mb_substr($text, 0, $this->preview_character_count, 'utf-8') . '...';
+    }
+    
+    public function menuCountItem(){
+        return $this->data_instance->getCountItem();
+    }
 }
