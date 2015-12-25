@@ -1,13 +1,12 @@
-<?php /*echo '<pre>'; print_r($this->comments);*/ ?>
-<?php foreach($this->comments as $comment) : ?>
+<?php foreach($this->data['comments'] as $comment) : ?>
 <div class="panel panel-default">
 	<div class="panel-heading comment-admin-header">
-		<img src="<?php $this->get_template_path(); ?>/images/avatars/<?=$comment['avatar']?>" class="img-responsive img-circle coment_avatar">
-		<span><b><?=$comment['uname']?></b></span>
-		<span><a href="mailto:<?=$comment['uemail']?>"><i><?=$comment['uemail']?></i></a></span>
+		<img src="<?php $this->get_template_path(); ?>/images/avatars/<?=$comment['user']->avatar?>" class="img-responsive img-circle coment_avatar">
+		<span><b><?=$comment['user']->uname?></b></span>
+		<span><a href="mailto:<?=$comment['user']->uemail?>"><i><?=$comment['user']->uemail?></i></a></span>
 		<span><i><?=$comment['ctime']?></i></span>
 		<span>к посту </span>
-		<a href="/single/index/post/<?=$comment['post_id']?>"><?=$comment['title']?></a>
+		<a href="/single/index/post/<?=$comment['post']->id?>"><?=$comment['post']->title?></a>
 	</div>
 	<form method="post" action="/comment/edit">
 	<div class="panel-body">
@@ -30,5 +29,5 @@
 </div>
 <?php endforeach; ?>
 <div>
-	<?php $this->get_pagination(); ?>
+	<?php $this->pagination(); ?>
 </div>

@@ -93,3 +93,23 @@ th, td.show_it{
 	background-color: #d9edf7;
 	border-color: #bce8f1;
 }
+
+.img-anchor{
+    position: relative;
+}
+
+.img-outer{
+    position: absolute;
+    z-index: 100;
+    top: 3px;
+    left: 0;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: none;
+}
+
+.img-name{
+    cursor: pointer;
+}

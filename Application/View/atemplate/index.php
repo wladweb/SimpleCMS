@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Admin area</title>
-	<link rel="stylesheet" type="text/css" href="/app/view/atemplate/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="/app/view/atemplate/astyle.css">
+	<link rel="stylesheet" type="text/css" href="/Application/View/atemplate/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/Application/View/atemplate/astyle.css">
 </head>
 <body>
 	<div class="navbar navbar-default navbar-fixed-top">
@@ -29,9 +29,10 @@
 			</div><!--col-md-9-->
 		</div>
 	</div><!--row-->
-<script type="text/javascript" src="/app/view/atemplate/js/jquery.min.js"></script>	
-<script type="text/javascript" src="/app/view/atemplate/js/tinymce/tinymce.min.js"></script>	
-<script type="text/javascript" src="/app/view/atemplate/bootstrap/js/bootstrap.min.js"></script>	
-<script type="text/javascript" src="/app/view/atemplate/js/amain.js"></script>	
+<script type="text/javascript" src="/Application/View/atemplate/js/jquery.min.js"></script>	
+<script type="text/javascript" src="/Application/View/atemplate/js/tinymce/tinymce.min.js"></script>	
+<script type="text/javascript" src="/Application/View/atemplate/bootstrap/js/bootstrap.min.js"></script>	
+<script type="text/javascript" src="/Application/View/atemplate/js/amain.js"></script>
+<script type="text/javascript" src="/Application/View/atemplate/js/img.js"></script>
 </body>
 </html>

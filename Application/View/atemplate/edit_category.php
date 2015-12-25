@@ -11,7 +11,7 @@
 	<tr>
 		<th><span class="glyphicon glyphicon-eye-open"></span></th>
 		<th colspan="2">Категории</th></tr>
-	<?php foreach($this->categories as $cat) : ?>
+	<?php foreach($this->data['categories'] as $cat) : ?>
 		<tr>
 			<form method="post" action="/category/update">
 				<td class="show_it"><input value="checked" type="checkbox" name="show_it" <?=$cat['show_it']?>>

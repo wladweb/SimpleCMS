@@ -4,19 +4,19 @@
 		<tr>
 			<td>Роль
 			</td>
-			<td><?=$this->user['role']?>
+			<td><?=$this->user->role->name?>
 			</td>
 		</tr>
 		<tr>
 			<td>Дата регистрации
 			</td>
-			<td><?=date('d-m-Y', $this->user['utime'])?>
+			<td><?=$this->user->utime?>
 			</td>
 		</tr>
 		<tr>
 			<td>Количество комментариев
 			</td>
-			<td><?=$this->user['coment_count']?>
+			<td><?=count($this->user->ownCommentsList)?>
 			</td>
 		</tr>
 		<tr>

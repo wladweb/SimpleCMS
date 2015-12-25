@@ -1,4 +1,4 @@
-<?php foreach($this->users_data as $user) : ?>
+<?php foreach($this->data['users'] as $user) : ?>
 <div class="row bord">
 	<div class="contaner">
 		<div class="col-md-2">
@@ -14,13 +14,13 @@
 					<tr>
 						<td>Роль
 						</td>
-						<td><?=$user['role']?>
+						<td><?=$user['role']->name?>
 						</td>
 					</tr>
 					<tr>
 						<td>Дата регистрации
 						</td>
-						<td><?=date('d-m-Y', $user['utime'])?>
+						<td><?=$user['utime']?>
 						</td>
 					</tr>
 					<tr>
@@ -39,7 +39,7 @@
 			</div>
 			<div class="panel-footer">
 				<?php if($user['role'] !== 'admin') : ?>
-					<a href="/users/del/u/<?=$user['uid']?>" class="btn btn-danger btn-sm pull-right"><span class="glyphicon glyphicon-trash"></span> Удалить</a>
+					<a href="/users/del/uid/<?=$user['uid']?>" class="btn btn-danger btn-sm pull-right"><span class="glyphicon glyphicon-trash"></span> Удалить</a>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -48,5 +48,5 @@
 </div>
 <?php endforeach; ?>
 <div>
-	<?php $this->get_pagination(); ?>
+	<?php $this->pagination(); ?>
 </div>
