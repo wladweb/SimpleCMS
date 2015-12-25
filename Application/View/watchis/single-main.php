@@ -1,10 +1,14 @@
+<?php
+    $post = $this->post;
+    $comments = $this->data['comments'];
+?>
 <div id="left">
 <div class="article">
 	<?php $this->show_template('popular_panel.php'); ?>
-	<h2><?=$this->post['title']?></h2>
-	<h3><?=$this->post['subtitle']?></h3>
-	<img class="post_preview" src="/images/<?php echo $this->post['img']?>">
-	<p><?=$this->post['content']?></p>
+	<h2><?=$post['title']?></h2>
+	<h3><?=$post['subtitle']?></h3>
+	<img class="post_preview" src="/images/<?php echo $post['img']?>">
+	<p><?=$post['content']?></p>
 </div>	
 	<br />
 	<?php

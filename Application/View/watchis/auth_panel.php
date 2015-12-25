@@ -2,7 +2,7 @@
 	<div class="auth-inner">
 		<?php
 			if($this->user){
-				echo 'Вы вошли как <a href="/users/edit"><b>'.$this->user['uname'].'</b></a> | <a href="/auth/logout">Выйти</a>';
+				echo 'Вы вошли как <a href="/users/edit"><b>'.$this->user->uname . '</b></a> | <a href="/users/logout">Выйти</a>';
 			}else{
 				$this->get_login_form();
 			}
@@ -11,7 +11,7 @@
 	
 	<!--register block-->
 	<div class="register-block">
-		<form method="post" action="/auth/register">
+		<form method="post" action="/users/register">
 			<table>
 				<tr>
 					<td><label for="rlogin">Логин</label></td>

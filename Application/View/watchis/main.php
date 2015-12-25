@@ -1,26 +1,26 @@
 <div id="left">
 
-    <?php foreach ($this->data['posts'] as $post) : ?>
+    <?php foreach ($this->data['posts'] as $this->post) : ?>
     
         <div class="article">
             
             <?php $this->show_template('popular_panel.php'); ?>
             
-            <h2><a href="/single/index/post/<?= $post['id'] ?>"><?= $post['title'] ?></a></h2>
-            <h3><?= $post['subtitle'] ?></h3>
+            <h2><a href="/single/index/post/<?= $this->post['id'] ?>"><?= $this->post['title'] ?></a></h2>
+            <h3><?= $this->post['subtitle'] ?></h3>
             <div class="clearfix">
-                <span class="float-right"><i><?= $post['ctime'] ?></i></span>
-                <span class="float-left"><b><?= $post['author'] ?></b></span>
+                <span class="float-right"><i><?= $this->post['ctime'] ?></i></span>
+                <span class="float-left"><b><?= $this->post['author'] ?></b></span>
             </div>
-            <img class="post_preview" src="/images/<?= $post['img'] ?>" title="" alt="">
-            <p><?= $post['content'] ?></p>
+            <img class="post_preview" src="/images/<?= $this->post['img'] ?>" title="" alt="">
+            <p><?= $this->cutText($this->post['content']) ?></p>
         </div>	
         <br />
         
     <?php endforeach; ?>
 
     <div class="pag">
-        <?php $this->get_pagination(); ?>
+        <?php $this->pagination(); ?>
     </div>	
 
 </div>
