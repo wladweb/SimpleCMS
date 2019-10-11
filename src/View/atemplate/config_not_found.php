@@ -1,6 +1,3 @@
-<?php
-$_SESSION['first_start'] = true;
-?>
 <!doctype html>
 <html lang="ru">
     <head>
@@ -37,6 +34,9 @@ $_SESSION['first_start'] = true;
             <h1>Не найден файл конфигурации <b>setup.ini</b></h1>
             <p class="message">
                 Для создания файла конфигурации отредактируйте и переименуйте файл <b>setup_example.ini</b> в корневой директории сайта.
+            </p>
+            <p class="message">
+                Config file <b>setup.ini</b> not found. Edit and rename file <b>setup_example.ini</b> in  root directory.
             </p>
         </div>
     </body>

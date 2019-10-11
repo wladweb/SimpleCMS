@@ -1,21 +1,3 @@
-<?php
-
-setcookie('bad_close_session', 'true', time() + 3600 * 24 * 7);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/install.php';
-    $path_ini_file = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
-            
-    $simple_install = new SimpleCMS\SimpleInstall($path_ini_file);
-    $simple_install->create_tables();
-
-    setcookie('bad_close_session', '', time() - 3600);
-    $this->sess_destroy();
-    header("Location: /index");
-}
-
-?>
 <!doctype html>
 <html lang="ru">
     <head>
@@ -56,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 margin:5px;
             }
             [type=text]{
-                //display:block;
                 width:500px;
                 border:1px solid #ccc;
                 border-radius:5px;
@@ -89,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <body>
         <div class="container">
             <h1>Пожалуйста заполните все поля</h1>
-            <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post">
+            <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
                 <fieldset>
                     <legend>Блог</legend>
                     <label for="blog_name">Название блога</label>
@@ -116,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" name="pass" id="pass">
                     <span class="red">*</span>
                 </fieldset>
-                <button type="submit" id="send-from">
+                <button type="submit" id="send-from" name="send-from">
                     Установить
                 </button>
             </form>

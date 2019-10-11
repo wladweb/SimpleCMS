@@ -3,27 +3,37 @@
 namespace Wladweb\SimpleCMS;
 
 use Wladweb\SimpleCMS\BlogException;
+use Wladweb\SimpleCMS\Assets\SimpleInstall;
+use Wladweb\SimpleCMS\Assets\Connection;
 use RedBeanPHP\RedException;
 
-class Application {
-
+class Application
+{
     const CONTROLLERS_PREFIX = 'Wladweb\\SimpleCMS\\Controller\\';
     const CONTROLLER = 'Controller';
     const ACTION = 'Action';
-
+    
+    public const DEBUG = true;
+    
+    public static $app_dir;
+    
     private static $controller;
     private static $action;
     private static $params = array();
-    
+
     /**
      * Parsing route from request uri
      * 
      * @return void 
      */
-    public static function run() {
+    public static function run()
+    {
+        self::$app_dir = \realpath('.');
+        Connection::connect();
+        SimpleInstall::checkInstallation();
 
-        self::is_first_start();
-
+        
+        
         $url_arr = array();
         $url = trim($_SERVER['REQUEST_URI'], '/');
 
@@ -51,16 +61,17 @@ class Application {
                 self::$action = $url_arr[1] . self::ACTION;
                 self::parseParametrs(array_slice($url_arr, 2));
         }
-        
+
         self::route();
     }
-    
+
     /**
      * Start route, cath Exceptions
      * 
      * @return void 
      */
-    public static function route() {
+    public static function route()
+    {
         try {
             self::startRoute();
         } catch (BlogException $e_blog) {
@@ -69,7 +80,7 @@ class Application {
             echo $e_red->getMessage();
         }
     }
-    
+
     /**
      * Create Controllers and start actions with ReflectionClass
      * 
@@ -78,7 +89,8 @@ class Application {
      * @throws BlogException Controllers file not found
      * @return void 
      */
-    private static function startRoute() {
+    private static function startRoute()
+    {
         if (file_exists('src/Controller/' . self::getController() . '.php')) {
 
             if (class_exists(self::CONTROLLERS_PREFIX . self::getController())) {
@@ -100,13 +112,14 @@ class Application {
             throw new BlogException('Произошла ошибка маршрутизации.Файл.');
         }
     }
-    
+
     /**
      * Create and save query paprameters array $key => $value
      * 
      * @param array $params Array with params from request uri
      */
-    private static function parseParametrs(array $params) {
+    private static function parseParametrs(array $params)
+    {
         $cnt = count($params);
 
         if ($cnt % 2 !== 0) {
@@ -127,66 +140,34 @@ class Application {
             self::$params = array_combine($keys, $values);
         }
     }
-    
+
     /**
      * Return controller class name
      * 
      * @return string controller class name
      */
-    public static function getController() {
+    public static function getController()
+    {
         return self::$controller;
     }
-    
+
     /**
      * Return action method name
      * 
      * @return string action method name
      */
-    public static function getAction() {
+    public static function getAction()
+    {
         return self::$action;
     }
-    
+
     /**
      * Return query parameters
      * 
      * @return array parameters
      */
-    public static function getParams() {
+    public static function getParams()
+    {
         return self::$params;
     }
-    
-    /**
-     * Check application first start 
-     * 
-     * @return void 
-     */
-    private static function is_first_start() {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
-        session_start();
-        if (!is_file($path)) {
-            include 'src/View/atemplate/please_rename_config_file.php';
-            exit;
-        } elseif (isset($_SESSION['first_start']) || isset($_COOKIE['bad_close_session'])) {
-            include 'src/View/atemplate/please_input_data.php';
-            exit;
-        }
-
-        self::sess_destroy();
-    }
-    
-    /**
-     * Destroing session
-     * 
-     * @return void 
-     */
-    private static function sess_destroy() {
-        $_SESSION = array();
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]
-            );
-        }
-        session_destroy();
-    }
-
 }
