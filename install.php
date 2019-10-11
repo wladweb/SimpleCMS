@@ -2,23 +2,24 @@
 
 namespace SimpleCMS;
 
-use SimpleCMS\Application\Model\BlogModel;
-use SimpleCMS\Application\BlogException;
+use Wladweb\SimpleCMS\Model\BlogModel;
+use Wladweb\SimpleCMS\BlogException;
 use RedBeanPHP\RedException;
 use RedBeanPHP\R;
 
-class SimpleInstall {
-
+class SimpleInstall
+{
     protected $post_data;
     protected $date;
-    
+
     /**
      * Setup database connection with RedBeanPHP
      * 
      * @param string $path Path to setup.ini file
      * @return void 
      */
-    public function __construct($path) {
+    public function __construct($path)
+    {
 
         try {
             new BlogModel($path);
@@ -29,27 +30,29 @@ class SimpleInstall {
         }
 
         $this->post_data = $this->get_post_data();
-        
+
         $dt = new \DateTime;
         $this->date = $dt->format('Y-m-d H:i:s');
     }
-    
+
     /**
      * Clear string, remove tags and spaces
      * 
      * @param string $str Input string
      * @return string Output string
      */
-    protected function clear_string($str) {
+    protected function clear_string($str)
+    {
         return trim(strip_tags($str));
     }
-    
+
     /**
      * Save data from POST
      * 
      * @return array
      */
-    protected function get_post_data() {
+    protected function get_post_data()
+    {
         $post_data = array();
         $post_data['blog_name'] = $this->clear_string($_POST['blog_name']);
         $post_data['blog_desc'] = $this->clear_string($_POST['blog_desc']);
@@ -59,14 +62,20 @@ class SimpleInstall {
         $post_data['pass'] = $this->clear_string($_POST['pass']);
         return $post_data;
     }
-    
+
     /**
      * Create tables and start data with RedBeanPHP
      * 
      * @return void 
      */
-    public function create_tables() {
-        
+    public function create_tables()
+    {
+        if (!R::testConnection()) {
+            throw new BlogException('Unable connect');
+        }
+
+        R::freeze(false);
+
         //table comments <-admin comment
         $acomment = R::dispense('comments');
         $acomment->cbody = 'Комментарий админа';
@@ -78,7 +87,7 @@ class SimpleInstall {
         $ucomment->cbody = 'Первый комметарий пользователя';
         $ucomment->ctime = $this->date;
         $ucomment->anchor = 'comm54bb8a7a39c1a';
-        
+
         //table posts
         $post = R::dispense('posts');
         $post->title = 'Первый пост';
@@ -93,20 +102,20 @@ Nulla sollicitudin felis in mi facilisis dapibus. Vivamus cursus tellus maximus 
 Donec ut mattis tellus. Vestibulum erat lectus, aliquet ac blandit in, gravida id massa. Phasellus dignissim nisi a dolor dapibus auctor. Aliquam porta velit nec turpis congue, non auctor nisl varius. Ut eget neque nisi. Aliquam pharetra risus ut metus pellentesque sagittis. Donec ornare, magna feugiat aliquam fermentum, nibh metus porttitor turpis, eget finibus lacus tellus vel nisi.
 
 Aliquam sed sodales ligula, eu facilisis eros. Mauris commodo libero orci, a sagittis turpis sagittis eget. Aenean facilisis purus nisl, ut maximus justo hendrerit sed. Praesent scelerisque ante non leo laoreet, vitae sagittis diam sollicitudin. Curabitur ac dictum neque. Pellentesque vel lorem tellus. Proin finibus tempus elementum. Sed a volutpat enim. Vivamus sit amet dolor eu tortor euismod consequat congue ac velit. Vestibulum tincidunt urna vitae enim tempus, et placerat est consequat. Morbi blandit elit at metus venenatis ornare. Phasellus pharetra metus et tellus egestas commodo. Etiam cursus metus sollicitudin tortor volutpat auctor. ';
-       
+
         $post->subtitle = 'Первая запись в блоге';
         $post->ctime = $this->date;
         $post->popular = 0;
         $post->img = 'hello_world.jpg';
         $post->ownCommentsList[] = $acomment;
         $post->ownCommentsList[] = $ucomment;
-        
+
         //table category
         $category = R::dispense('category');
         $category->cat_name = "Без категории";
         $category->show_it = 1;
         $category->ownPostsList[] = $post;
-        
+
         //table users <-admin
         $auser = R::dispense('users');
         $auser->uname = $this->post_data['login'];
@@ -114,7 +123,7 @@ Aliquam sed sodales ligula, eu facilisis eros. Mauris commodo libero orci, a sag
         $auser->role = R::enum('role:admin');
         $auser->upass = md5(md5($this->post_data['pass']));
         $auser->uemail = $this->post_data['email'];
-        $auser->ukey = null;
+        $auser->ukey = md5(microtime() . rand(1000, 100000));
         $auser->lastvote = $this->date;
         $auser->utime = $this->date;
         $auser->ownCommentsList[] = $acomment;
@@ -127,7 +136,7 @@ Aliquam sed sodales ligula, eu facilisis eros. Mauris commodo libero orci, a sag
         $uuser->role = R::enum('role:user');
         $uuser->upass = md5(md5('user'));
         $uuser->uemail = 'user@gmail.com';
-        $uuser->ukey = null;
+        $uuser->ukey = md5(microtime() . rand(1000, 100000));
         $uuser->lastvote = $this->date;
         $uuser->utime = $this->date;
         $uuser->ownCommentsList[] = $ucomment;
@@ -142,12 +151,17 @@ Aliquam sed sodales ligula, eu facilisis eros. Mauris commodo libero orci, a sag
         $bloginfo->pagination = 10;
 
         //save
-        R::store($category);
-        R::store($auser);
-        R::store($uuser);
-        R::store($post);
-        R::store($acomment);
-        R::store($ucomment);
-        R::store($bloginfo);
+        $beans = [
+            $category,
+            $auser,
+            $uuser,
+            $post,
+            $acomment,
+            $ucomment,
+            $bloginfo
+        ];
+
+        R::storeAll($beans);
     }
+
 }
