@@ -11,40 +11,18 @@ class Application {
     const CONTROLLER = 'Controller';
     const ACTION = 'Action';
 
-    private static $instance;
-    private $controller;
-    private $action;
-    private $params = array();
-    
-    /**
-     * Start parse route
-     */
-    private function __construct() {
-        $this->parseRoute();
-    }
-    
-    /**
-     * Return instance of Application. Pattern Singleton.
-     * 
-     * @return App
-     */
-    public static function getInstance() {
-        
-        if (!(self::$instance instanceof self)) {
-            self::$instance = new self;
-        }
-        
-        return self::$instance;
-    }
+    private static $controller;
+    private static $action;
+    private static $params = array();
     
     /**
      * Parsing route from request uri
      * 
      * @return void 
      */
-    private function parseRoute() {
+    public static function run() {
 
-        $this->is_first_start();
+        self::is_first_start();
 
         $url_arr = array();
         $url = trim($_SERVER['REQUEST_URI'], '/');
@@ -57,22 +35,24 @@ class Application {
 
         switch ($ccount) {
             case 0:
-                $this->controller = 'Index' . self::CONTROLLER;
-                $this->action = 'index' . self::ACTION;
+                self::$controller = 'Index' . self::CONTROLLER;
+                self::$action = 'index' . self::ACTION;
                 break;
             case 1:
-                $this->controller = ucfirst($url_arr[0]) . self::CONTROLLER;
-                $this->action = 'index' . self::ACTION;
+                self::$controller = ucfirst($url_arr[0]) . self::CONTROLLER;
+                self::$action = 'index' . self::ACTION;
                 break;
             case 2:
-                $this->controller = ucfirst($url_arr[0]) . self::CONTROLLER;
-                $this->action = $url_arr[1] . self::ACTION;
+                self::$controller = ucfirst($url_arr[0]) . self::CONTROLLER;
+                self::$action = $url_arr[1] . self::ACTION;
                 break;
             default:
-                $this->controller = ucfirst($url_arr[0]) . self::CONTROLLER;
-                $this->action = $url_arr[1] . self::ACTION;
-                $this->parseParametrs(array_slice($url_arr, 2));
+                self::$controller = ucfirst($url_arr[0]) . self::CONTROLLER;
+                self::$action = $url_arr[1] . self::ACTION;
+                self::parseParametrs(array_slice($url_arr, 2));
         }
+        
+        self::route();
     }
     
     /**
@@ -80,9 +60,9 @@ class Application {
      * 
      * @return void 
      */
-    public function route() {
+    public static function route() {
         try {
-            $this->startRoute();
+            self::startRoute();
         } catch (BlogException $e_blog) {
             echo $e_blog->getMessage();
         } catch (RedException $e_red) {
@@ -98,16 +78,16 @@ class Application {
      * @throws BlogException Controllers file not found
      * @return void 
      */
-    private function startRoute() {
-        if (file_exists('src/Controller/' . $this->getController() . '.php')) {
+    private static function startRoute() {
+        if (file_exists('src/Controller/' . self::getController() . '.php')) {
 
-            if (class_exists(self::CONTROLLERS_PREFIX . $this->getController())) {
+            if (class_exists(self::CONTROLLERS_PREFIX . self::getController())) {
 
-                $rfc = new \ReflectionClass(self::CONTROLLERS_PREFIX . $this->getController());
+                $rfc = new \ReflectionClass(self::CONTROLLERS_PREFIX . self::getController());
 
-                if ($rfc->hasMethod($this->getAction())) {
+                if ($rfc->hasMethod(self::getAction())) {
 
-                    $method = $rfc->getMethod($this->getAction());
+                    $method = $rfc->getMethod(self::getAction());
                     $controller = $rfc->newInstance();
                     $method->invoke($controller);
                 } else {
@@ -126,7 +106,7 @@ class Application {
      * 
      * @param array $params Array with params from request uri
      */
-    private function parseParametrs(array $params) {
+    private static function parseParametrs(array $params) {
         $cnt = count($params);
 
         if ($cnt % 2 !== 0) {
@@ -144,7 +124,7 @@ class Application {
         }
 
         if (!empty($keys)) {
-            $this->params = array_combine($keys, $values);
+            self::$params = array_combine($keys, $values);
         }
     }
     
@@ -153,8 +133,8 @@ class Application {
      * 
      * @return string controller class name
      */
-    public function getController() {
-        return $this->controller;
+    public static function getController() {
+        return self::$controller;
     }
     
     /**
@@ -162,8 +142,8 @@ class Application {
      * 
      * @return string action method name
      */
-    public function getAction() {
-        return $this->action;
+    public static function getAction() {
+        return self::$action;
     }
     
     /**
@@ -171,8 +151,8 @@ class Application {
      * 
      * @return array parameters
      */
-    public function getParams() {
-        return $this->params;
+    public static function getParams() {
+        return self::$params;
     }
     
     /**
@@ -180,7 +160,7 @@ class Application {
      * 
      * @return void 
      */
-    private function is_first_start() {
+    private static function is_first_start() {
         $path = $_SERVER['DOCUMENT_ROOT'] . '/setup.ini';
         session_start();
         if (!is_file($path)) {
@@ -191,7 +171,7 @@ class Application {
             exit;
         }
 
-        $this->sess_destroy();
+        self::sess_destroy();
     }
     
     /**
@@ -199,7 +179,7 @@ class Application {
      * 
      * @return void 
      */
-    private function sess_destroy() {
+    private static function sess_destroy() {
         $_SESSION = array();
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();

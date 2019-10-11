@@ -46,7 +46,7 @@ abstract class IController {
     );
 
     public function __construct() {
-        $this->params = App::getInstance()->getParams();
+        $this->params = App::getParams();
         $this->data_instance = new Data;
         $this->transporter = new Transporter;
         $this->check_message();

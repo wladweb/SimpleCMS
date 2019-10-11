@@ -82,8 +82,7 @@ class Transporter {
     );
 
     public function __construct() {
-        $this->app = App::getInstance();
-        $this->params = $this->app->getParams();
+        $this->params = App::getParams();
         if (!empty($_SERVER['HTTP_REFERER'])) {
             $this->referer = $_SERVER['HTTP_REFERER'];
         }

@@ -65,8 +65,8 @@ class Pagination{
     }
     
     private function buildA($anchor, $param){
-        $controller  =  lcfirst(strstr(App::getInstance()->getController(), 'Controller', true));
-        $action  =  strstr(App::getInstance()->getAction(), 'Action', true);
+        $controller  =  lcfirst(strstr(App::getController(), 'Controller', true));
+        $action  =  strstr(App::getAction(), 'Action', true);
         
         $param_string = '';
         
