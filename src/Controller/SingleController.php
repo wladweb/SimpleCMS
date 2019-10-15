@@ -9,7 +9,6 @@ class SingleController extends IController {
 
     public function indexAction() {
         
-        
         if (!empty($this->params['post'])) {
             $this->data = $this->data_instance->getPostData($this->params['post']);
             

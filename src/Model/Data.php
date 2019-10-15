@@ -14,8 +14,8 @@ class Data{
     const MODEL_NAMESPACE = 'Wladweb\\SimpleCMS\\Model\\';
     
     public function __construct() {
-        $this->controller = stristr(App::getController(), 'Controller', true);
-        $this->action = stristr(App::getAction(), 'Action', true);
+        //$this->controller = stristr(App::getController(), 'Controller', true);
+        //$this->action = stristr(App::getAction(), 'Action', true);
         $this->params = App::getParams();
         $this->factory = new LazyFactory;
     }

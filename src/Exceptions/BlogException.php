@@ -1,6 +1,6 @@
 <?php
 
-namespace Wladweb\SimpleCMS;
+namespace Wladweb\SimpleCMS\Exceptions;
 
 use Exception;
 

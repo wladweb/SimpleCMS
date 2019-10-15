@@ -2,7 +2,7 @@
 
 namespace Wladweb\SimpleCMS\Controller;
 
-class EditpostsController extends IController {
+class PostsController extends IController {
 
     protected $tpl;
 

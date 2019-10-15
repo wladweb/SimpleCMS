@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6693a808ae3164ed663b681ac2f64be9",
+    "content-hash": "9891710a13f17870810b6773cb4ee69a",
     "packages": [
         {
             "name": "gabordemooij/redbean",
@@ -46,6 +46,107 @@
                 "orm"
             ],
             "time": "2019-09-24T20:36:43+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "wladweb/servicelocator",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wladweb/ServiceLocator.git",
+                "reference": "d58cd6b299da518e3d365509228702247aeec11b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wladweb/ServiceLocator/zipball/d58cd6b299da518e3d365509228702247aeec11b",
+                "reference": "d58cd6b299da518e3d365509228702247aeec11b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "psr/container": "1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wladweb\\ServiceLocator\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Wladweb\\ServiceLocator\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vladimir Petrov",
+                    "role": "developer"
+                }
+            ],
+            "description": "Simple service locator",
+            "keywords": [
+                "php",
+                "service locator"
+            ],
+            "support": {
+                "source": "https://github.com/wladweb/ServiceLocator/tree/1.0.1",
+                "issues": "https://github.com/wladweb/ServiceLocator/issues"
+            },
+            "time": "2019-10-03T17:17:15+00:00"
         }
     ],
     "packages-dev": [],

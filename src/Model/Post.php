@@ -1,7 +1,7 @@
 <?php namespace Wladweb\SimpleCMS\Model;
 
 use Wladweb\SimpleCMS\Model\IModel;
-use Wladweb\SimpleCMS\BlogException;
+use Wladweb\SimpleCMS\Exceptions\BlogException;
 use RedBeanPHP\R;
 
 class Post extends IModel

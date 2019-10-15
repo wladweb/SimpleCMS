@@ -4,7 +4,6 @@ namespace Wladweb\SimpleCMS\Assets;
 
 use Wladweb\SimpleCMS\Application as App;
 use RedBeanPHP\R;
-use RedBeanPHP\RedException;
 
 /**
  * Description of Connection
