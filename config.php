@@ -14,9 +14,6 @@ return [
     'controller_admin' => [
         'value' => 'Wladweb\SimpleCMS\Controller\AdminController'
     ],
-    'controller_auth' => [
-        'value' => 'Wladweb\SimpleCMS\Controller\AuthController'
-    ],
     'controller_category' => [
         'value' => 'Wladweb\SimpleCMS\Controller\CategoryController'
     ],
@@ -34,6 +31,23 @@ return [
     ],
     'controller_posts' => [
         'value' => 'Wladweb\SimpleCMS\Controller\PostsController'
+    ],
+    
+    //MODELS
+    'model_posts' => [
+        'value' => 'Wladweb\SimpleCMS\Model\Posts'
+    ],
+    'model_bloginfo' => [
+        'value' => 'Wladweb\SimpleCMS\Model\Bloginfo'
+    ],
+    'model_category' => [
+        'value' => 'Wladweb\SimpleCMS\Model\Category'
+    ],
+    'model_comments' => [
+        'value' => 'Wladweb\SimpleCMS\Model\Comments'
+    ],
+    'model_users' => [
+        'value' => 'Wladweb\SimpleCMS\Model\Users'
     ]
 ];
 

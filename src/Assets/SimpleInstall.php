@@ -178,6 +178,7 @@ Aliquam sed sodales ligula, eu facilisis eros. Mauris commodo libero orci, a sag
         ];
 
         R::storeAll($beans);
+        R::freeze(true);
     }
 
 }

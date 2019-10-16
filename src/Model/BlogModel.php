@@ -3,25 +3,8 @@
 namespace Wladweb\SimpleCMS\Model;
 
 use RedBeanPHP\R;
-use RedBeanPHP\RedException;
 
 class BlogModel{
-    
-    public function __construct($path = 'setup.ini') {
-        $db_data = $this->parseIni($path);
-        
-        $dsn = "mysql:host={$db_data['host']};dbname={$db_data['dbname']}";
-        $user = $db_data['user'];
-        $password = $db_data['pass'];
-        
-        try{
-            R::setup($dsn, $user, $password);
-        } catch(RedException $e){
-            R::selectDatabase('default');
-        }
-        
-        R::freeze(true);
-    }
     
     protected function deleteRow($table, $id){
         R::trash($table, $id);
@@ -78,22 +61,5 @@ class BlogModel{
     
     public function save($bean){
         return R::store($bean);
-    }
-    
-    protected function parseIni($path) {
-        
-        if (is_file($path)) {
-            if (false === $data = parse_ini_file($path)){
-                throw new BlogException('Проверьте валидность ini-файла');
-            }
-        } else {
-            throw new BlogException('Проверьте наличие ini-файла');
-        }
-        
-        return $data; 
-    }
-    
-    public function test(){
-        var_dump(R::load('posts',1));exit;
     }
 }

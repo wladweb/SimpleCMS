@@ -28,7 +28,7 @@ class Application
         self::route();
         self::executeAction();
     }
-
+    
     private static function executeAction()
     {
         call_user_func(self::$controller_action);

@@ -2,58 +2,33 @@
 
 namespace Wladweb\SimpleCMS\Assets;
 
-use Wladweb\SimpleCMS\Model\Posts;
-use Wladweb\SimpleCMS\Model\Category;
-use Wladweb\SimpleCMS\Model\Bloginfo;
-use Wladweb\SimpleCMS\Model\Users;
-use Wladweb\SimpleCMS\Model\Comments;
+use Wladweb\SimpleCMS\Application as App;
 
-class LazyFactory {
-    
-    private $posts;
-    private $category;
-    private $bloginfo;
-    private $users;
-    private $comments;
-
-    public function getPosts() {
-
-        if (!$this->posts) {
-            $this->posts = new Posts;
-        }
-        return $this->posts;
+class LazyFactory
+{
+    public function getPosts()
+    {
+        return App::get('model_posts');
     }
-    
-    public function getCategory() {
 
-        if (!$this->category) {
-            $this->category = new Category;
-        }
-        return $this->category;
+    public function getCategory()
+    {
+        return App::get('model_category');
     }
-    
-    public function getBloginfo() {
 
-        if (!$this->bloginfo) {
-            $this->bloginfo = new Bloginfo;
-        }
-        return $this->bloginfo;
+    public function getBloginfo()
+    {
+        return App::get('model_bloginfo');
     }
-    
-    public function getUsers() {
 
-        if (!$this->users) {
-            $this->users = new Users;
-        }
-        return $this->users;
+    public function getUsers()
+    {
+        return App::get('model_users');
     }
-    
-    public function getComments() {
 
-        if (!$this->comments) {
-            $this->comments = new Comments;
-        }
-        return $this->comments;
+    public function getComments()
+    {
+        return App::get('model_comments');
     }
 
 }
