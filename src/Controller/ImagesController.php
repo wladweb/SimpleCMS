@@ -54,7 +54,7 @@ class ImagesController extends IController {
     public function avatarAction() {
         $img = $this->saveImg($this->upload_dir_ava);
         
-        $this->data_instance->update('Users', array('uid' => $this->user-id, 'avatar' => $img));
+        $this->data_instance->update('Users', array('uid' => $this->user->id, 'avatar' => $img));
         $this->transporter->end_work(__CLASS__, 'i1');
     }
     
@@ -107,7 +107,7 @@ class ImagesController extends IController {
 
     protected function re_save_img() {
         if ($this->mime_type === 'jpeg') {
-            $d = imagecreatefromjpeg($_FILES['preview_load']['tmp_name']);
+            $d = \imagecreatefromjpeg($_FILES['preview_load']['tmp_name']);
             if ($d !== false) {
                 imagejpeg($d, $_FILES['preview_load']['tmp_name']);
                 return true;
