@@ -2,7 +2,7 @@
 
 namespace Wladweb\SimpleCMS\Controller;
 
-use Wladweb\SimpleCMS\Assets\Pagination;
+use Wladweb\SimpleCMS\Application as App;
 
 class CategoryController extends IController {
 
@@ -23,7 +23,13 @@ class CategoryController extends IController {
             $this->tpl = 'category-main.php'; 
         }
         
-        $this->data['pagination'] = new Pagination($this->pagination, $this->data['posts_count'], $this->params);
+        $this->data['pagination'] = App::get('pagination', [
+            'constructor' => [
+                $this->pagination,
+                $this->data['posts_count'],
+                $this->params
+            ]
+        ]);
         
         
         $this->show_template('category.php');

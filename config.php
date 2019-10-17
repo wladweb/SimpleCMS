@@ -53,6 +53,16 @@ return [
     'model_users' => [
         'value' => 'Wladweb\SimpleCMS\Model\Users',
         'singleton' => true
+    ],
+    
+    //PAGINATION
+    'pagination' => [
+        'value' => 'Wladweb\SimpleCMS\Assets\Pagination'
+    ],
+    
+    //TRANSPORTER
+    'transporter' => [
+        'value' => 'Wladweb\SimpleCMS\Assets\Transporter'
     ]
 ];
 

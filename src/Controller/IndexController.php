@@ -2,7 +2,7 @@
 
 namespace Wladweb\SimpleCMS\Controller;
 
-use Wladweb\SimpleCMS\Assets\Pagination;
+use Wladweb\SimpleCMS\Application as App;
 
 class IndexController extends IController {
 
@@ -30,7 +30,14 @@ class IndexController extends IController {
     protected function getDataForIndex() {
         $this->get_post_start_value();
         $this->data = $this->data_instance->getIndexData($this->post_start, $this->pagination);
-        $this->data['pagination'] = new Pagination($this->pagination, $this->data['posts_count'], $this->params);
+        
+        $this->data['pagination'] = App::get('pagination', [
+            'constructor' => [
+                $this->pagination,
+                $this->data['posts_count'],
+                $this->params
+            ]
+        ]);
     }
 
     public function addAction() {

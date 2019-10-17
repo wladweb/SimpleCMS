@@ -2,7 +2,7 @@
 
 namespace Wladweb\SimpleCMS\Controller;
 
-use Wladweb\SimpleCMS\Assets\Pagination;
+use Wladweb\SimpleCMS\Application as App;
 
 class UsersController extends IController {
 
@@ -72,7 +72,14 @@ class UsersController extends IController {
         
         $this->data = $this->data_instance->getUsers($this->post_start, $this->pagination);
         $this->data['count_data'] = $this->data_instance->countData();
-        $this->data['pagination'] = $this->data['pagination'] = new Pagination($this->pagination, $this->data['users_count'], $this->params);
+        
+        $this->data['pagination'] = App::get('pagination', [
+            'constructor' => [
+                $this->pagination,
+                $this->data['users_count'],
+                $this->params
+            ]
+        ]);
         
         //$this->count_data = $this->do_true_action(self::MBloginfo,
                 //'get_menu_count_data');

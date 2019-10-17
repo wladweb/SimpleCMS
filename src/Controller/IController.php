@@ -4,17 +4,9 @@ namespace Wladweb\SimpleCMS\Controller;
 
 use Wladweb\SimpleCMS\Application as App;
 use Wladweb\SimpleCMS\Model\Data;
-use Wladweb\SimpleCMS\Assets\Transporter;
 
-abstract class IController {
-/*
-    const MPosts = 0;
-    const MBloginfo = 1;
-    const MComments = 2;
-    const MCategory = 3;
-    const MUsers = 4;
-    const MImages = 5;
-*/
+abstract class IController 
+{
     protected $model;
     protected $params;
     protected $ini_file = 'setup.ini';
@@ -47,7 +39,7 @@ abstract class IController {
     public function __construct() {
         $this->params = App::getParams();
         $this->data_instance = new Data;
-        $this->transporter = new Transporter;
+        $this->transporter = App::get('transporter');
         $this->set_template_name();
         $this->check_message();
         $this->check_user();
@@ -92,14 +84,19 @@ abstract class IController {
                 
                 $this->vote = false;
                 
-                $this->data_instance->update('Users', array('id' => $this->user->id, 'lastvote' => date('Y-m-d H:i:s', time())));
+                //$this->data_instance->update('Users', array('id' => $this->user->id, 'lastvote' => date('Y-m-d H:i:s', time())));
                 
-                setcookie('vv', '', time() - 3600, '/');
+                //setcookie('vv', '', time() - 3600, '/');
             } else {
                 
                 $this->vote = true;
             }
         } else {
+            $this->vote = true;
+        }
+        
+        /*
+        else {
             
             $date_time = new \DateTime($this->user->lastvote);
             $dt = $date_time->getTimestamp();
@@ -110,6 +107,8 @@ abstract class IController {
                 $this->vote = false;
             }
         }
+         * 
+         */
     }
 
     protected function is_admin() {

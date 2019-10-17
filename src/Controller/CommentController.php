@@ -2,7 +2,7 @@
 
 namespace Wladweb\SimpleCMS\Controller;
 
-use Wladweb\SimpleCMS\Assets\Pagination;
+use Wladweb\SimpleCMS\Application as App;
 
 class CommentController extends IController {
 
@@ -53,7 +53,14 @@ class CommentController extends IController {
         $this->tpl = 'edit_comment';
         $this->data = $this->data_instance->getComments($this->post_start, $this->pagination);
         $this->data['count_data'] = $this->data_instance->countData();
-        $this->data['pagination'] = $this->data['pagination'] = new Pagination($this->pagination, $this->data['comment_count'], $this->params);
+        
+        $this->data['pagination'] = App::get('pagination', [
+            'constructor' => [
+                $this->pagination,
+                $this->data['comment_count'],
+                $this->params
+            ]
+        ]);
         
        // $this->comments = $this->do_true_action(self::MComments,
                 //'get_all_comments',
