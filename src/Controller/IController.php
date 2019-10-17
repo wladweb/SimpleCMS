@@ -3,19 +3,18 @@
 namespace Wladweb\SimpleCMS\Controller;
 
 use Wladweb\SimpleCMS\Application as App;
-use Wladweb\SimpleCMS\Model\BlogModel;
 use Wladweb\SimpleCMS\Model\Data;
 use Wladweb\SimpleCMS\Assets\Transporter;
 
 abstract class IController {
-
+/*
     const MPosts = 0;
     const MBloginfo = 1;
     const MComments = 2;
     const MCategory = 3;
     const MUsers = 4;
     const MImages = 5;
-
+*/
     protected $model;
     protected $params;
     protected $ini_file = 'setup.ini';
@@ -49,42 +48,20 @@ abstract class IController {
         $this->params = App::getParams();
         $this->data_instance = new Data;
         $this->transporter = new Transporter;
+        $this->set_template_name();
         $this->check_message();
         $this->check_user();
-    }
-    
-    public function _construct() {
-        $this->params = App::getInstance()->getParams();
-        
-        $this->model_factory = new ModelFactory;
-        $this->set_template_name();
-        $this->set_pagination();
-        
-        
     }
     
     public function pagination($ul_class = 'pagination', $li_class = 'pagination-item', $active_class = 'active'){
         $p = $this->data['pagination'];
         $p->show($ul_class, $li_class, $active_class);
     }
-    
-    public function do_true_action($code, $action, $pars = array()) {
-        $model = $this->model_factory->get_model($code);
-        $reflectionModel = new \ReflectionObject($model);
-        if ($reflectionModel->hasMethod($action)) {
-            $method = $reflectionModel->getMethod($action);
-            return $method->invokeArgs($model, $pars);
-        }
-    }
-
-    protected function set_template_name() {
-        $this->template_name = $this->do_true_action(self::MBloginfo,
-                        'get_template_name')['template'];
-    }
-
-    protected function set_pagination() {
-        $this->pagination = $this->do_true_action(self::MBloginfo,
-                        'get_pagination_value')['pagination'];
+ 
+    protected function set_template_name() 
+    {
+        $bloginfo = $this->data_instance->getAdminBloginfo();
+        $this->template_name = $bloginfo['bloginfo']['template'];
     }
 
     protected function check_message() {
@@ -149,20 +126,6 @@ abstract class IController {
         if (!$this->user) {
             header('Location:/');
             exit;
-        }
-    }
-
-    protected function get_data() {
-        $this->blog_info = $this->do_true_action(self::MBloginfo,
-                'get_blog_info');
-        $this->category = $this->do_true_action(self::MCategory,
-                'get_categories_edit');
-        $this->popular_posts = $this->do_true_action(self::MPosts,
-                'get_popular_posts');
-        $this->last_comments = $this->do_true_action(self::MComments,
-                'get_last_comments');
-        foreach ($this->last_comments as &$lc) {
-            $lc['cbody'] = mb_substr($lc['cbody'], 0, 30, 'utf-8') . '...';
         }
     }
 

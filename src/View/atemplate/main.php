@@ -23,7 +23,7 @@
 	<select class="form-control" id="template" name="templ">
 	  <?php 
 	  foreach($this->arr_templates as $template){
-			if($template === $this->template_name){
+			if($template === $blog_info['template']){
 				echo "<option value='{$template}' selected='selected'>{$template}</option>";
 			}else{
 				echo "<option value='{$template}'>{$template}</option>";

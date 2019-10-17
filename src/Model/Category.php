@@ -88,12 +88,9 @@ class Category extends BlogModel{
         
     }
     
-    public function testAdd(){
-        $cat = R::dispense('category');
-        $cat->cat_name = 'Спорт';
-        $cat->show_it = 1;
-        
-        R::store($cat);
+    public function add($data)
+    {
+        return $this->addRow(self::TABLE, $data);
     }
 }
 

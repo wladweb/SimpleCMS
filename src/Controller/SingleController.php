@@ -24,29 +24,6 @@ class SingleController extends IController {
         
         $this->show_template('single.php');
     }
-    
-    public function _indexAction() {
-        $this->get_data();
-        if (!empty($this->params['post'])) {
-            $this->post = $this->do_true_action(self::MPosts, 'get_post',
-                    array($this->params['post']));
-        } else {
-            $this->tpl = '404.php';
-            $this->show_template('index.php');
-            exit;
-        }
-        if ($this->post !== false) {
-            $this->comments = $this->do_true_action(self::MComments,
-                    'get_comments', array($this->post['id']));
-            $this->post['post_comment_count'] = count($this->comments);
-            $this->tpl = 'single-main.php';
-            $this->show_template('single.php');
-        } else {
-            $this->tpl = '404.php';
-            $this->show_template('index.php');
-            exit;
-        }
-    }
 
     public function get_comments() {
         if (!empty($this->data['comments'])) {

@@ -15,19 +15,6 @@ class ImagesController extends IController {
         $this->upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/images/";
         $this->upload_dir_ava = $_SERVER['DOCUMENT_ROOT'] . "/images/avatars/";
     }
-    
-    public function indexAction() {
-        $this->is_admin();
-        $this->get_post_start_value();
-        $this->count_data = $this->do_true_action(self::MBloginfo,
-                'get_menu_count_data');
-        $this->images_data = $this->do_true_action(self::MImages,
-                'get_all_images',
-                array((int) $this->post_start, (int) $this->pagination));
-        $this->posts_count = array_pop($this->images_data);
-        $this->tpl = 'images';
-        $this->get_atemplate();
-    }
 
     protected function get_pagination() {
         $arr_page_links = parent::get_pagination();
@@ -132,7 +119,7 @@ class ImagesController extends IController {
             }
         }
     }
-
+/*
     public function delAction() {
         if (!empty($this->params['i'])) {
             $iid = abs((int) $this->params['i']);
@@ -151,5 +138,5 @@ class ImagesController extends IController {
             $this->transporter->end_work(__CLASS__, 'd2');
         }
     }
-
+*/
 }

@@ -11,20 +11,11 @@ class AdminController extends IController {
         $this->tpl = 'main';
         
         $result = $this->data_instance->getAdminBloginfo();
+        //var_dump($result);exit;
         $this->data['blog_info'] = $result['bloginfo'];
         $this->data['count_data'] = $result['count_data'];
+        
         $this->arr_templates = $this->get_all_templates();
-        $this->get_atemplate();
-    }
-    
-    public function _indexAction() {
-        $this->is_admin();
-        $this->tpl = 'main';
-        $this->arr_templates = $this->get_all_templates();
-        $this->blog_info = $this->do_true_action(self::MBloginfo,
-                'get_blog_info');
-        $this->count_data = $this->do_true_action(self::MBloginfo,
-                'get_menu_count_data');
         $this->get_atemplate();
     }
 
@@ -36,7 +27,7 @@ class AdminController extends IController {
             $data['description'] = $_POST['blogdesc'];
             $data['author'] = $_POST['blogauthor'];
             $data['email'] = $_POST['authormail'];
-            $data['templait'] = $_POST['templ'];
+            $data['template'] = $_POST['templ'];
             $data['pagination'] = $_POST['pagination'];
             
             //$this->do_true_action(self::MBloginfo, 'update_blog_info',
