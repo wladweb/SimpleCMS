@@ -52,8 +52,9 @@ class IndexController extends IController {
             $data['content'] = trim(strip_tags($_POST['content']));
             $data['users_id'] = $this->user['id'];
             $data['ctime'] = date('Y-m-d H:i:s', time());
+            $data['popular'] = 0;
             
-            $this->data_instance->add('Posts', $data);
+            $r = $this->data_instance->add('Posts', $data);
             
             if ($r) {
                 $this->transporter->end_work(__CLASS__, 'a1');

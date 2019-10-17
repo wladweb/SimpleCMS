@@ -63,7 +63,7 @@ class Posts extends BlogModel{
     
     /************************/
     public function add($data){
-        $this->addRow(self::TABLE, $data);
+        return $this->addRow(self::TABLE, $data);
     }
 }
 
