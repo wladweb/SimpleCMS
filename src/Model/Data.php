@@ -3,19 +3,16 @@
 namespace Wladweb\SimpleCMS\Model;
 
 use Wladweb\SimpleCMS\Application as App;
-use Wladweb\SimpleCMS\Assets\LazyFactory;
 
 class Data
 {
     private $params;
-    private $factory;
 
     const MODEL_NAMESPACE = 'Wladweb\\SimpleCMS\\Model\\';
 
     public function __construct()
     {
         $this->params = App::getParams();
-        $this->factory = new LazyFactory;
     }
 
     public function __call($name, $arguments = array())
@@ -34,19 +31,19 @@ class Data
     protected function getCommonData()
     {
 
-        $result['bloginfo'] = $this->factory->getBloginfo()->getData();
-        $result['menu'] = $this->factory->getCategory()->getCategories();
+        $result['bloginfo'] = App::get('model_bloginfo')->getData();
+        $result['menu'] = App::get('model_category')->getCategories();
 
         //sidebar
-        $result['popular_posts'] = $this->factory->getPosts()->getPopularList();
-        $result['last_comments'] = $this->factory->getComments()->getLastComments();
+        $result['popular_posts'] = App::get('model_posts')->getPopularList();
+        $result['last_comments'] = App::get('model_comments')->getLastComments();
 
         return $result;
     }
 
     public function getCategoriesList()
     {
-        return $this->factory->getCategory()->getCategories(true);
+        return App::get('model_category')->getCategories(true);
     }
 
     public function getIndexData($start, $size)
@@ -54,7 +51,7 @@ class Data
 
         $result = $this->getCommonData();
 
-        $posts_data = $this->factory->getPosts()->getPostsList($start, $size);
+        $posts_data = App::get('model_posts')->getPostsList($start, $size);
 
         $result['posts'] = $posts_data['posts'];
         $result['posts_count'] = $posts_data['posts_count'];
@@ -67,7 +64,7 @@ class Data
 
         $result = $this->getCommonData();
 
-        $category_data = $this->factory->getCategory()->getCategoryPosts($id, $start, $size);
+        $category_data = App::get('model_category')->getCategoryPosts($id, $start, $size);
 
         $result['category'] = $category_data['category'];
         if (isset($category_data['posts']))
@@ -82,7 +79,7 @@ class Data
 
         $result = $this->getCommonData();
 
-        $post_bean = $this->factory->getPosts()->getPost($id);
+        $post_bean = App::get('model_posts')->getPost($id);
 
         $result['comments'] = $post_bean->ownCommentsList;
         $result['post'] = $post_bean->export();
@@ -93,7 +90,7 @@ class Data
     public function getUserData($id)
     {
 
-        $user_bean = $this->factory->getUsers()->get($id);
+        $user_bean = App::get('model_users')->get($id);
 
         $result['comments'] = $user_bean->ownCommentsList;
         $result['user_id'] = $user_bean->id;
@@ -103,29 +100,26 @@ class Data
 
     public function getAdminBloginfo()
     {
-
-        $bloginfo = $this->factory->getBloginfo();
-
         $result['count_data'] = $this->countData();
-        $result['bloginfo'] = $bloginfo->getData();
+        $result['bloginfo'] = App::get('model_bloginfo')->getData();
 
         return $result;
     }
 
     public function getComments($start, $size)
     {
-        return $this->factory->getComments()->getCommentsList($start, $size);
+        return App::get('model_comments')->getCommentsList($start, $size);
     }
 
     public function getUsers($start, $size)
     {
-        return $this->factory->getUsers()->getUsersList($start, $size);
+        return App::get('model_users')->getUsersList($start, $size);
     }
 
     public function countData()
     {
 
-        $bloginfo = $this->factory->getBloginfo();
+        $bloginfo = App::get('model_bloginfo');
 
         $count_data['posts'] = $bloginfo->getCount('posts');
         $count_data['users'] = $bloginfo->getCount('users');

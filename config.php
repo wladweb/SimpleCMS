@@ -35,19 +35,24 @@ return [
     
     //MODELS
     'model_posts' => [
-        'value' => 'Wladweb\SimpleCMS\Model\Posts'
+        'value' => 'Wladweb\SimpleCMS\Model\Posts',
+        'singleton' => true
     ],
     'model_bloginfo' => [
-        'value' => 'Wladweb\SimpleCMS\Model\Bloginfo'
+        'value' => 'Wladweb\SimpleCMS\Model\Bloginfo',
+        'singleton' => true
     ],
     'model_category' => [
-        'value' => 'Wladweb\SimpleCMS\Model\Category'
+        'value' => 'Wladweb\SimpleCMS\Model\Category',
+        'singleton' => true
     ],
     'model_comments' => [
-        'value' => 'Wladweb\SimpleCMS\Model\Comments'
+        'value' => 'Wladweb\SimpleCMS\Model\Comments',
+        'singleton' => true
     ],
     'model_users' => [
-        'value' => 'Wladweb\SimpleCMS\Model\Users'
+        'value' => 'Wladweb\SimpleCMS\Model\Users',
+        'singleton' => true
     ]
 ];
 
