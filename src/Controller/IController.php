@@ -204,7 +204,7 @@ abstract class IController
         include_once $this->get_template_path() . 'inc.php';
         
         foreach ($this->scripts as $name => $script) {
-            $path = '/Application/View/' . $this->get_template_name() . '/js/' . $script;
+            $path = '/src/View/' . $this->get_template_name() . '/js/' . $script;
             if (is_file($_SERVER['DOCUMENT_ROOT'] . $path)) {
                 echo "<script type='text/javascript' src=$path></script>\n\r";
             }

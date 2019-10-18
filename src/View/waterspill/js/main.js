@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$('#reg-open-button').click(function(){
 		$('.register-block').slideToggle(300);
 	});
-	$('#reg-button').click(function(){
+	$('#reg-open-button').click(function(){
 		var needs = [$('#rlogin'),$('#rpass'),$('#remail')];
 		var error = 0;
 		var c = 0;
