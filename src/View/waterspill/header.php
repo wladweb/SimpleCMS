@@ -5,8 +5,8 @@
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <?php $this->header_data(); ?>
-  <title><?=$this->blog_info['blogname']?></title>
-  <link href="<?php echo $this->get_template_path(); ?>style.css" rel="stylesheet" type="text/css" />
+  <title><?=$this->data['bloginfo']['blogname']?></title>
+  <link href="/<?php echo $this->get_template_path(); ?>style.css" rel="stylesheet" type="text/css" />
   
   <!--[if IE]>
   <style type="text/css"> 
@@ -21,9 +21,9 @@
 
   <div id="header">
   
-    <h1><?=$this->blog_info['blogname']?></h1>
+    <h1><?=$this->data['bloginfo']['blogname']?></h1>
     
-    <h2 class="description"><?=$this->blog_info['description']?></h2>
+    <h2 class="description"><?=$this->data['bloginfo']['description']?></h2>
   
   </div><!-- end #header -->
   

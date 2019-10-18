@@ -1,7 +1,7 @@
 <div id="mainContent">
-    <h1 class="cat"><?= $this->cat_name ?></h1>
+    <h1 class="cat"><?= $this->data['category']['catname'] ?></h1>
     <hr><br>
-    <?php foreach ($this->cat_arr as $this->post) : ?>	
+    <?php foreach ($this->data['posts'] as $this->post) : ?>	
         <div class="blogItem">
             <h2><a href="/single/index/post/<?= $this->post['id'] ?>"><?= $this->post['title'] ?></a></h2>
 
