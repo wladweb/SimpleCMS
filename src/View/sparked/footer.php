@@ -15,7 +15,7 @@
 <div class="wrapper row6">
   <div id="copyright" class="clear"> 
     <p class="fl_left">Copyright &copy; 2014 - All Rights Reserved - <a href="#">Domain Name</a></p>
-    <p class="fl_right">Автор, <a title="Awsome blog" href="mailto:<?=$this->blog_info['email']?>"><?=$this->blog_info['author']?></a></p>
+    <p class="fl_right">Автор, <a title="Awsome blog" href="mailto:<?=$this->data['bloginfo']['email']?>"><?=$this->data['bloginfo']['author']?></a></p>
   </div>
 </div>
 <!-- JAVASCRIPTS --> 

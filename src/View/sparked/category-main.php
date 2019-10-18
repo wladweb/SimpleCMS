@@ -2,10 +2,10 @@
 <div class="wrapper row4">
   <main id="container" class="clear"> 
     <!-- container body --> 
-    <h1 class="cat"><?=$this->cat_name?></h1>
+    <h1 class="cat"><?=$this->data['category']['catname']?></h1>
 	<hr><br>
     <ul class="nospace center clear">
-	<?php foreach($this->cat_arr as $this->post) : ?>
+	<?php foreach($this->data['posts'] as $this->post) : ?>
       <li class="one_third first">
 	  <?php $this->show_template('popular_panel.php'); ?>
 	  <a href="/single/index/post/<?=$this->post['id']?>"><img class="pad5 borderedbox push30" src="/images/<?=$this->post['img']?>" alt=""></a>
